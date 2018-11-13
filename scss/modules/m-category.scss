@@ -1,0 +1,117 @@
+.m-category {
+	&.m--placeholder {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		transition: background-color 0.3s ease-in-out,
+			color 0.3s ease-in-out;
+		cursor: pointer;
+
+		&:hover {
+			background-color: $secondaryColor;
+			color: #FFF;
+		}
+	}
+
+	&.m--horizontal {
+		min-width: 600px;
+		border-bottom: 0;
+		border-right: 1px solid #eee;
+		padding: 30px 30px;
+
+		&.m--placeholder {
+			min-width: 300px;
+
+			&:hover {
+				background-color: $Palette1;
+			}
+		}
+	}
+
+	.categoryHeader {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		margin-bottom: 30px;
+
+		.categoryName {
+			font-size: 1.8rem;
+			line-height: 2.4rem;
+			color: $Palette4;
+
+			.categoryCount {
+				font-size: 1.6rem;
+				color: $Palette3;
+			}
+		}
+
+		.categoryActions {
+			display: flex;
+			align-items: center;
+
+			opacity: 0;
+			transition: opacity 0.3s ease-in-out;
+
+			.action {
+				margin-right: 15px;
+
+				&:last-child {
+					margin: 0;
+				}
+			}
+
+			.renameAction {
+				font-weight: 300;
+				cursor: pointer;
+
+				&:hover {
+					text-decoration: underline;
+				}
+			}
+
+			.removeAction {
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				cursor: pointer;
+
+				width: 30px;
+				height: 30px;
+				border-radius: 50%;
+				transition: background-color 0.3s ease-in-out,
+					color 0.3s ease-in-out;
+
+				&:hover {
+					background-color: #555;
+					color: #FFF;
+				}
+			}
+		}
+	}
+
+	.sticketsWrapper {
+		display: flex;
+		flex-wrap: wrap;
+		margin: 0 -15px;
+	}
+
+	&.m--horizontal {
+		.sticketsWrapper {
+			.m-sticket {
+				flex: 1 1 calc(50% - 15px);
+			}
+		}
+	}
+
+	&:hover {
+		.categoryHeader .categoryActions {
+			opacity: 1;
+		}
+
+		.sticketsWrapper {
+			.m-sticket.m--placeholder {
+				opacity: 1;
+			}
+		}
+	}
+}

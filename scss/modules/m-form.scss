@@ -1,0 +1,26 @@
+.m-form {
+	display: flex;
+	flex-direction: column;
+
+	.formTitle {
+		font-size: 1.2rem;
+		margin-bottom: 15px;
+		font-weight: 500;
+	}
+
+	.formInputWrapper {
+		margin-bottom: 10px;
+
+		.formInput {
+			margin-top: 5px;
+			padding: 5px;
+			font-size: .9rem;
+		}
+
+	}
+	
+	.addSticketButton {
+		font-size: .9rem;
+		padding: 5px;
+	}
+}

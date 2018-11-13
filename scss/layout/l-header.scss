@@ -1,0 +1,57 @@
+.l-header {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100vw;
+	z-index: 100;
+
+	background-color: $secondaryColor;
+	
+	.headerWrapper {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+
+		height: 64px;
+
+		.appTitle {
+			font-weight: 900;
+			font-size: 1.6rem;
+			color: #FFF;
+		}
+
+		.actionsWrapper {
+			display: flex;
+			align-items: center;
+
+			// margin-left: auto;
+
+			.action {
+				display: flex;
+				justify-content: center;
+				align-items: center;
+
+				width: 35px;
+				height: 35px;
+				border-radius: 5px;
+				margin-right: 15px;
+
+				font-size: 1.4rem;
+				color: #FFF;
+				font-weight: 900;
+				cursor: pointer;
+
+				background-color: darken($secondaryColor, 15%);
+
+				&:last-child {
+					margin: 0;
+				}
+
+				&.m--actionToggleLayout {
+					width: auto;
+					padding: 0 10px;
+				}
+			}
+		}
+	}
+}

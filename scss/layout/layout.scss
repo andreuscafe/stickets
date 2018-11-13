@@ -1,0 +1,46 @@
+body {
+	font-family: $primaryFont;
+	color: #333;
+}
+
+.appWrapper {
+	width: 100vw;
+	height: 100vh;
+	padding: 64px 0 0 0;
+
+	&.m--horizontal {
+		display: flex;
+		flex-direction: column;
+		padding: 0px;
+	}
+}
+
+.contentWrapper {
+	margin: 0 auto;
+	padding: 0 15px;
+
+	&.m--horizontal {
+		padding: 0px;
+		display: flex;
+		max-width: 100%;
+		overflow-x: auto;
+	}
+
+	&:not(.m--horizontal) {
+		@include desktop {
+			max-width: 1600px;
+		}
+
+		@include laptop {
+			max-width: 900px;
+		}
+
+		@include tablet {
+			max-width: 600px;
+		}
+
+		@include mobile {
+			max-width: 100%;
+		}
+	}
+}

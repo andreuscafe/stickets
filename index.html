@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Simple stickets</title>
+	<meta name="viewport" content="initial-scale=1">
+
+	<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+	<div id="app" class="appWrapper" :class="store.state.horizontalLayout ? 'm--horizontal' : ''">
+		<div class="l-loader" v-show="loading">S</div>
+
+		<header class="l-header">
+			<div class="contentWrapper">
+				<div class="headerWrapper">
+					<div class="appTitle">Stickets</div>
+					
+					<div class="m-search m--onHeader">
+						<input type="text" class="searchInput" placeholder="Buscar...">
+					</div>
+
+					<div class="actionsWrapper">
+						<div class="action m--actionToggleLayout" @click="toggleOrientation">
+							TL
+						</div>
+
+						<div class="m-add">
+							<div class="addButton" v-on:click="isAdding = !isAdding; withShadow = !withShadow">+</div>
+							<div class="l-shadow" v-show="withShadow" v-on:click="isAdding = !isAdding; withShadow = !withShadow"></div>
+							<div class="addForm" v-show="isAdding">
+								<div class="m-form">
+									<h2 class="formTitle">Crear sticket</h2>
+									<label class="formInputWrapper">
+										Título:
+										<input type="text" class="formInput" v-model="form.title">
+									</label>
+									<label class="formInputWrapper">
+										Descripción:
+										<input type="text" class="formInput" v-model="form.description"></input>
+									</label>
+									<label class="formInputWrapper">
+										Categoría:
+										<select v-model="form.categoryKey" class="formInput">
+											<option v-for="category in store.state.categories" :value="category.key">{{category.name}}</option>
+										</select>
+									</label>
+									<button class="addSticketButton" @click="addSticket">Agregar Sticket</button>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</header>
+
+		<section class="l-categories" :class="store.state.horizontalLayout ? 'm--horizontal' : ''">
+			<div class="contentWrapper" :class="store.state.horizontalLayout ? 'm--horizontal' : ''">
+				<div class="m-category" :class="store.state.horizontalLayout ? 'm--horizontal' : ''" @drop.prevent="dropSticket" @dragover.prevent="allowDrop" @dragenter.prevent.stop="dragEnter" @dragleave.prevent.stop="dragLeave" v-for="category in store.state.categories" :data-key="category.key">
+					<div class="categoryHeader">
+						<h1 class="categoryName">{{category.name}} <span class="categoryCount">({{category.stickets.length}})</span></h1>
+						<div class="categoryActions">
+							<div class="renameAction action" @click="renameCategory(category.key)">Renombrar</div>
+							<div class="renameAction action" @click="clearCategoryStickets(category.key)" v-if="category.stickets.length > 0">Limpiar stickets</div>
+							<div class="removeAction action" @click="removeCategory(category.key)">✕</div>
+						</div>
+					</div>
+					<div class="sticketsWrapper">
+						<div class="m-sticket" draggable="true" v-on:dragstart="dragSticket" v-for="(sticket, index) in category.stickets" :data-key="sticket.key" >
+							<div class="sticketActions">
+								<div class="action m--actionDelete" @click="category.stickets.splice(index, 1)">✕</div>
+							</div>
+							<div class="sticketTitle">{{sticket.title}}</div>
+							<div class="sticketDescription">{{sticket.description}}</div>
+						</div>
+
+						<!-- Placeholder para agregar nuevos -->
+						<div class="m-sticket m--placeholder" :class="formHasData ? 's--hasData' : ''">
+							<input class="sticketTitle" placeholder="Agregar sticket" v-model="form.title">
+							<textarea class="sticketDescription" placeholder="Escribí algo útil..." v-model="form.description"></textarea>
+							<div class="sticketSubmit" @click="addSticket(category.key)" v-show="formHasData">Agregar</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="m-category m--placeholder m--horizontal" @click="addCategory">
+					<div class="addText">Agregar una categoría</div>
+				</div>
+			</div>
+		</section>
+
+		<footer class="l-footer">
+			<div class="m-madeWithLove">
+				Hecho con <span class="love"><svg class="heart" viewBox="0 0 32 29.6">
+  <path d="M23.6,0c-3.4,0-6.3,2.7-7.6,5.6C14.7,2.7,11.8,0,8.4,0C3.8,0,0,3.8,0,8.4c0,9.4,9.5,11.9,16,21.2
+	c6.1-9.3,16-12.1,16-21.2C32,3.8,28.2,0,23.6,0z"/>
+</svg></span> por <a class="loveName" target="_blank" alt="AndreusCafe" href="https://twitter.com/andreuscafe">@andreuscafe</a>
+			</div>
+		</footer>
+	</div>
+	<script src="js/vue.js"></script>
+	<!-- <script src="js/vuex.js"></script> -->
+
+	<script>
+		const _debug = true;
+
+		let store = {
+			debug: _debug !== undefined ? !!_debug : true,
+			state: localStorage.getItem("storeState") ? JSON.parse(localStorage.getItem('storeState')) : {
+				horizontalLayout: false,
+				stickets: [],
+				categories: []
+			},
+			toggleOrientation () {
+				if (this.debug) console.log('Changed orientation');
+				this.state.horizontalLayout = !this.state.horizontalLayout;
+			},
+
+			addSticket (title, description, categoryKey) {
+				if (this.debug) console.log('addSticket triggered with title "'+ title +'" and description "'+ description+'" on category '+categoryKey);
+
+				for (let i = 0; i < this.state.categories.length; i++) {
+					if (this.state.categories[i].key === categoryKey) {
+						this.state.categories[i].stickets.push({
+							key: new Date().getTime(),
+							title: title,
+							description: description
+						});
+
+						break;
+					}
+				}
+			},
+			addCategory (name) {
+				if (this.debug) console.log('addCategory triggered with name: '+ name);
+				this.state.categories.push({
+					key: new Date().getTime(),
+					name: name,
+					stickets: []
+				});
+			},
+			moveSticket (sticketKey, fromKey, toKey) {
+				if (this.debug) {
+					// statement
+					console.log("Dragged sticket "+sticketKey+" from category "+fromKey+" to category "+toKey);
+				}
+
+				let fromCat = this.getCategory(fromKey);
+
+				for(let i = 0; i < fromCat.stickets.length; i++){
+					if (fromCat.stickets[i].key == sticketKey) {
+						var sticket = fromCat.stickets.splice(i, 1);
+
+						this.getCategory(toKey).stickets.push(sticket[0])
+					}
+				}
+			},
+			clearAllStickets () {
+				if (this.debug) {
+					console.log("All stickets removed!");
+				}
+
+				for(let i = 0, length1 = this.state.categories.length; i < length1; i++){
+					this.state.categories[i].stickets = []
+				}
+			},
+			clearCategoryStickets (categoryKey) {
+				if (this.debug) {
+					console.log("All stickets from category "+categoryKey+" removed!");
+				}
+				this.getCategory(categoryKey).stickets = []
+			},
+			clearCategory (categoryKey) {
+				if (this.debug) {
+					console.log("Category "+categoryKey+" removed!");
+				}
+
+				store.state.categories.splice(store.state.categories.findIndex(category => category.key == categoryKey), 1)
+			},
+			renameCategory (categoryKey, newName) {
+				this.getCategory(categoryKey).name = newName;
+			},
+			getCategory (categoryKey) {
+				return store.state.categories.filter((cat) => {
+					return cat.key == categoryKey
+				})[0]
+			}
+		}
+
+		let vm = new Vue({
+			el: "#app",
+			data: {
+				store: store,
+				loading: true,
+				withShadow: false,
+				isAdding: false,
+				form: {
+					title: undefined,
+					description: undefined
+				}
+			},
+			methods: {
+				toggleOrientation() {
+					this.store.toggleOrientation();
+				},
+				addSticket(categoryKey) {
+					if (this.form.title && this.form.description && (categoryKey || this.form.categoryKey)) {
+						this.store.addSticket(this.form.title, this.form.description, categoryKey || this.form.categoryKey)
+						this.isAdding = false;
+						this.withShadow = false;
+						this.form.title = "";
+						this.form.description = "";
+					} else {
+						console.log("Fill the fields!");
+					}
+				},
+
+				clearStickets() {
+					if (_debug !== false) {
+						this.store.clearStickets();
+					}
+				},
+
+				dragSticket(e) {
+					dragged = e;
+					e.dataTransfer.setData("keys", JSON.stringify({
+						sticketKey: e.target.attributes["data-key"].value,
+						categoryKey: e.target.closest(".m-category").attributes["data-key"].value
+					}));
+				},
+
+				allowDrop(e) {},
+
+				dragEnter(e) {
+					let childNodes = e.target.closest(".m-category").querySelectorAll("*");
+					for(let i = 0; i < childNodes.length; i++) { childNodes[i].style.pointerEvents = "none" }
+					e.target.closest(".m-category").style.backgroundColor = "rgba(0, 0, 0, 0.1)";
+
+				},
+
+				dragLeave(e) {
+					let childNodes = e.target.closest(".m-category").querySelectorAll("*");
+					for(let i = 0; i < childNodes.length; i++) { childNodes[i].style.pointerEvents = "initial" }
+					e.target.closest(".m-category").style.backgroundColor = "transparent";
+				},
+
+				dropSticket(e) {
+					dropped = e;
+					let sticketData = JSON.parse(e.dataTransfer.getData("keys"));
+					let newCategoryKey = e.target.closest(".m-category").attributes["data-key"].value;
+					e.target.closest(".m-category").style.backgroundColor = "transparent";
+
+					let childNodes = e.target.closest(".m-category").querySelectorAll("*");
+
+					for(let i = 0; i < childNodes.length; i++) { childNodes[i].style.pointerEvents = "initial" }
+
+					this.store.moveSticket(sticketData.sticketKey, sticketData.categoryKey, newCategoryKey)
+				},
+
+				renameCategory(categoryKey) {
+					let newName = prompt("¿Cuál será el nuevo nombre?");
+					this.store.renameCategory(categoryKey, newName)
+				},
+
+				clearCategoryStickets(categoryKey) {
+					this.store.clearCategoryStickets(categoryKey)
+				},
+
+				removeCategory(categoryKey) {
+					this.store.clearCategory(categoryKey)
+				},
+
+				addCategory() {
+					this.store.addCategory(prompt("Dale un nombre a la nueva categoría"));
+				},
+
+				deleteSticket(sticketId) {
+
+				}
+			},
+			mounted: function () {
+				this.$nextTick(function () {
+					// Code that will run only after the
+					// entire view has been rendered
+					this.loading = false;
+				})
+			},
+			computed: {
+				formHasData: function() {
+					return !!this.form.title || !!this.form.description
+				}
+			}
+		})
+
+		vm.$watch('store.state', function() {
+			if (_debug) console.log("Store has changed!");
+
+			localStorage.setItem("storeState", JSON.stringify(store.state))
+		}, {deep: true})
+	</script>
+</body>
+</html>

@@ -1,0 +1,112 @@
+.m-sticket {
+	flex: 1 1 calc(33% - 15px);
+	max-width: calc(50% - 15px);
+	margin: 0 7.5px 15px;
+	padding: 15px;
+	border-radius: 5px;
+	position: relative;
+
+	background-color: #FFF;
+	@include h-boxShadow;
+
+	&:hover {
+		.sticketActions {
+			opacity: 1;
+		}
+	}
+
+	&.m--placeholder {
+		position: relative;
+		opacity: 0;
+		background-color: transparent;
+		border: 2px dashed #aaa;
+		box-shadow: none;
+		color: #aaa;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		flex-direction: column;
+		transition: opacity 0.3s ease-in-out;
+
+		&.s--hasData {
+			opacity: 1;
+		}
+
+		.sticketTitle, .sticketDescription {
+			min-width: 100%;
+			max-width: 100%;
+			font-size: 1rem;
+			border: 0;
+			background-color: transparent;
+			outline: 0;
+		}
+
+		.sticketTitle {
+			flex: 0 0 auto;
+		}
+
+		.sticketDescription {
+			flex: 1 0 auto;
+			min-height: 70px;
+		}
+
+		.sticketSubmit {
+			position: absolute;
+			bottom: 0;
+			right: 15px;
+			transform: translateY(50%);
+			background-color: #FFF;
+			padding: 10px;
+			border-radius: 5px;
+			color: $Palette4;
+			cursor: pointer;
+			transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+
+			&:hover {
+				background-color: $Palette4;
+				color: $Palette1;
+			}
+		}
+	}
+
+	.sticketActions {
+		opacity: 0;
+		position: absolute;
+		top: 0;
+		right: 15px;
+		transform: translateY(-50%);
+		transition: opacity 0.3s ease-in-out;
+
+		.action {
+			width: 35px;
+			height: 35px;
+			background-color: #fff;
+			border-radius: 50%;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			color: #333;
+			transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+			cursor: pointer;
+
+			&:hover {
+				background-color: #444;
+				color: #fefefe;
+			}
+
+			&.m--actionDelete {
+
+			}
+		}
+	}
+
+	.sticketTitle {
+		font-weight: bold;
+		margin-bottom: 15px;
+		line-height: 1.5rem;
+	}
+
+	.sticketDescription {
+		line-height: 1.5rem;
+	}
+}
