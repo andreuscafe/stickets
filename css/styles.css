@@ -106,7 +106,7 @@ body {
   left: 0;
   width: 100vw;
   z-index: 100;
-  background-color: #cd563a;
+  background-color: #57cdbd;
 }
 .l-header .headerWrapper {
   display: flex;
@@ -135,7 +135,7 @@ body {
   color: #FFF;
   font-weight: 900;
   cursor: pointer;
-  background-color: #953b26;
+  background-color: #31a696;
 }
 .l-header .headerWrapper .actionsWrapper .action:last-child {
   margin: 0;
@@ -151,6 +151,8 @@ body {
   align-items: center;
   background-color: #FFF;
   padding: 30px 0;
+  z-index: 5;
+  box-shadow: 0 5px 25px rgba(0, 0, 0, 0.2);
 }
 
 .l-loader {
@@ -164,7 +166,7 @@ body {
   justify-content: center;
   align-items: center;
   background-color: #fefefe;
-  color: #cd563a;
+  color: #57cdbd;
   font-size: 6rem;
   font-weight: bold;
 }
@@ -181,11 +183,11 @@ body {
 
 .l-form {
   padding: 20px 0;
-  background-color: #cd563a;
+  background-color: #57cdbd;
 }
 
 .l-categories {
-  background-color: #FCFCFC;
+  background-color: #fafafa;
   padding: 60px 0px;
 }
 .l-categories.m--horizontal {
@@ -237,7 +239,7 @@ body {
   font-size: 1.4rem;
   color: #FFF;
   font-weight: 900;
-  background-color: #953b26;
+  background-color: #31a696;
 }
 .m-add .addForm {
   position: absolute;
@@ -249,7 +251,7 @@ body {
   padding: 15px;
   background-color: #FFF;
   border-radius: 5px;
-  box-shadow: 0 5px 15px -5px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 5px 10px -5px rgba(0, 0, 0, 0.1);
 }
 .m-add .addForm:before {
   content: "";
@@ -274,6 +276,9 @@ body {
   font-weight: 100;
 }
 
+.m-category {
+  transition: background-color 0.3s ease-in-out;
+}
 .m-category.m--placeholder {
   display: flex;
   justify-content: center;
@@ -282,20 +287,21 @@ body {
   cursor: pointer;
 }
 .m-category.m--placeholder:hover {
-  background-color: #cd563a;
-  color: #FFF;
+  background-color: #57cdbd;
+  color: #366f87;
 }
 .m-category.m--horizontal {
   min-width: 600px;
   border-bottom: 0;
   border-right: 1px solid #eee;
   padding: 30px 30px;
+  overflow-y: auto;
 }
 .m-category.m--horizontal.m--placeholder {
   min-width: 300px;
 }
 .m-category.m--horizontal.m--placeholder:hover {
-  background-color: #ff916d;
+  background-color: #9effcd;
 }
 .m-category .categoryHeader {
   display: flex;
@@ -306,11 +312,11 @@ body {
 .m-category .categoryHeader .categoryName {
   font-size: 1.8rem;
   line-height: 2.4rem;
-  color: #873024;
+  color: #366f87;
 }
 .m-category .categoryHeader .categoryName .categoryCount {
   font-size: 1.6rem;
-  color: #cd563a;
+  color: #57cdbd;
 }
 .m-category .categoryHeader .categoryActions {
   display: flex;
@@ -349,6 +355,11 @@ body {
   display: flex;
   flex-wrap: wrap;
   margin: 0 -15px;
+  position: relative;
+}
+.m-category.m--masonry .sticketsWrapper {
+  display: block;
+  margin: 0;
 }
 .m-category.m--horizontal .sticketsWrapper .m-sticket {
   flex: 1 1 calc(50% - 15px);
@@ -368,57 +379,25 @@ body {
   border-radius: 5px;
   position: relative;
   background-color: #FFF;
-  box-shadow: 0 5px 15px -5px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 5px 10px -5px rgba(0, 0, 0, 0.1);
 }
 .m-sticket:hover .sticketActions {
   opacity: 1;
 }
-.m-sticket.m--placeholder {
-  position: relative;
-  opacity: 0;
-  background-color: transparent;
-  border: 2px dashed #aaa;
-  box-shadow: none;
-  color: #aaa;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  transition: opacity 0.3s ease-in-out;
+.m-sticket.m--masonry {
+  margin: 0;
+  flex-basis: 50%;
+  transition: left 0.3s ease-in-out, top 0.3s ease-in-out;
 }
-.m-sticket.m--placeholder.s--hasData {
-  opacity: 1;
+.m-sticket .sticketTitle {
+  font-weight: bold;
+  margin-bottom: 15px;
+  line-height: 1.5rem;
+  color: #555;
 }
-.m-sticket.m--placeholder .sticketTitle, .m-sticket.m--placeholder .sticketDescription {
-  min-width: 100%;
-  max-width: 100%;
-  font-size: 1rem;
-  border: 0;
-  background-color: transparent;
-  outline: 0;
-}
-.m-sticket.m--placeholder .sticketTitle {
-  flex: 0 0 auto;
-}
-.m-sticket.m--placeholder .sticketDescription {
-  flex: 1 0 auto;
-  min-height: 70px;
-}
-.m-sticket.m--placeholder .sticketSubmit {
-  position: absolute;
-  bottom: 0;
-  right: 15px;
-  transform: translateY(50%);
-  background-color: #FFF;
-  padding: 10px;
-  border-radius: 5px;
-  color: #873024;
-  cursor: pointer;
-  transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
-}
-.m-sticket.m--placeholder .sticketSubmit:hover {
-  background-color: #873024;
-  color: #ff916d;
+.m-sticket .sticketDescription {
+  line-height: 1.5rem;
+  color: #666;
 }
 .m-sticket .sticketActions {
   opacity: 0;
@@ -444,13 +423,54 @@ body {
   background-color: #444;
   color: #fefefe;
 }
-.m-sticket .sticketTitle {
-  font-weight: bold;
-  margin-bottom: 15px;
-  line-height: 1.5rem;
+.m-sticket.m--placeholder {
+  position: relative;
+  opacity: 0;
+  background-color: transparent;
+  border: 2px dashed #aaa;
+  box-shadow: none;
+  color: #aaa;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  transition: opacity 0.3s ease-in-out;
 }
-.m-sticket .sticketDescription {
-  line-height: 1.5rem;
+.m-sticket.m--placeholder.m--hasData {
+  opacity: 1;
+}
+.m-sticket.m--placeholder .sticketTitle, .m-sticket.m--placeholder .sticketDescription {
+  min-width: 100%;
+  max-width: 100%;
+  font-size: 1rem;
+  border: 0;
+  background-color: transparent;
+  outline: 0;
+}
+.m-sticket.m--placeholder .sticketTitle {
+  flex: 0 0 auto;
+  color: #555;
+}
+.m-sticket.m--placeholder .sticketDescription {
+  flex: 1 0 auto;
+  min-height: 70px;
+  color: #666;
+}
+.m-sticket.m--placeholder .sticketSubmit {
+  position: absolute;
+  bottom: 0;
+  right: 15px;
+  transform: translateY(50%);
+  background-color: #FFF;
+  padding: 10px;
+  border-radius: 5px;
+  color: #366f87;
+  cursor: pointer;
+  transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+}
+.m-sticket.m--placeholder .sticketSubmit:hover {
+  background-color: #366f87;
+  color: #9effcd;
 }
 
 .m-madeWithLove .love {
@@ -477,7 +497,7 @@ body {
 }
 .m-madeWithLove .loveName {
   text-decoration: none;
-  color: #cd563a;
+  color: #57cdbd;
 }
 
 /*# sourceMappingURL=styles.css.map */

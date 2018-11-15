@@ -15,58 +15,22 @@
 		}
 	}
 
-	&.m--placeholder {
-		position: relative;
-		opacity: 0;
-		background-color: transparent;
-		border: 2px dashed #aaa;
-		box-shadow: none;
-		color: #aaa;
-		display: flex;
-		justify-content: center;
-		align-items: center;
-		flex-direction: column;
-		transition: opacity 0.3s ease-in-out;
+	&.m--masonry {
+		margin: 0;
+		flex-basis: 50%;
+		transition: left 0.3s ease-in-out, top 0.3s ease-in-out;
+	}
 
-		&.s--hasData {
-			opacity: 1;
-		}
+	.sticketTitle {
+		font-weight: bold;
+		margin-bottom: 15px;
+		line-height: 1.5rem;
+		color: #555;
+	}
 
-		.sticketTitle, .sticketDescription {
-			min-width: 100%;
-			max-width: 100%;
-			font-size: 1rem;
-			border: 0;
-			background-color: transparent;
-			outline: 0;
-		}
-
-		.sticketTitle {
-			flex: 0 0 auto;
-		}
-
-		.sticketDescription {
-			flex: 1 0 auto;
-			min-height: 70px;
-		}
-
-		.sticketSubmit {
-			position: absolute;
-			bottom: 0;
-			right: 15px;
-			transform: translateY(50%);
-			background-color: #FFF;
-			padding: 10px;
-			border-radius: 5px;
-			color: $Palette4;
-			cursor: pointer;
-			transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
-
-			&:hover {
-				background-color: $Palette4;
-				color: $Palette1;
-			}
-		}
+	.sticketDescription {
+		line-height: 1.5rem;
+		color: #666;
 	}
 
 	.sticketActions {
@@ -100,13 +64,59 @@
 		}
 	}
 
-	.sticketTitle {
-		font-weight: bold;
-		margin-bottom: 15px;
-		line-height: 1.5rem;
-	}
+	&.m--placeholder {
+		position: relative;
+		opacity: 0;
+		background-color: transparent;
+		border: 2px dashed #aaa;
+		box-shadow: none;
+		color: #aaa;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		flex-direction: column;
+		transition: opacity 0.3s ease-in-out;
 
-	.sticketDescription {
-		line-height: 1.5rem;
+		&.m--hasData {
+			opacity: 1;
+		}
+
+		.sticketTitle, .sticketDescription {
+			min-width: 100%;
+			max-width: 100%;
+			font-size: 1rem;
+			border: 0;
+			background-color: transparent;
+			outline: 0;
+		}
+
+		.sticketTitle {
+			flex: 0 0 auto;
+			color: #555;
+		}
+
+		.sticketDescription {
+			flex: 1 0 auto;
+			min-height: 70px;
+			color: #666;
+		}
+
+		.sticketSubmit {
+			position: absolute;
+			bottom: 0;
+			right: 15px;
+			transform: translateY(50%);
+			background-color: #FFF;
+			padding: 10px;
+			border-radius: 5px;
+			color: $Palette4;
+			cursor: pointer;
+			transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+
+			&:hover {
+				background-color: $Palette4;
+				color: $Palette1;
+			}
+		}
 	}
 }
