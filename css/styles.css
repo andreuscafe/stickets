@@ -61,23 +61,24 @@ body {
 .appWrapper {
   width: 100vw;
   height: 100vh;
-  padding: 64px 0 0 0;
-}
-.appWrapper.m--horizontal {
   display: flex;
   flex-direction: column;
+}
+.appWrapper.m--horizontal {
   padding: 0px;
 }
 
 .contentWrapper {
   margin: 0 auto;
-  padding: 0 15px;
+  padding: 0 20px;
 }
 .contentWrapper.m--horizontal {
   padding: 0px;
   display: flex;
   max-width: 100%;
+  min-width: 100%;
   overflow-x: auto;
+  justify-content: flex-start;
 }
 @media (min-width: 1441px) {
   .contentWrapper:not(.m--horizontal) {
@@ -101,11 +102,7 @@ body {
 }
 
 .l-header {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  z-index: 100;
+  flex: 0 0 auto;
   background-color: #57cdbd;
 }
 .l-header .headerWrapper {
@@ -147,6 +144,7 @@ body {
 
 .l-footer {
   display: flex;
+  flex: 0 0 auto;
   justify-content: center;
   align-items: center;
   background-color: #FFF;
@@ -187,21 +185,23 @@ body {
 }
 
 .l-categories {
+  flex: 1 1 auto;
   background-color: #fafafa;
-  padding: 60px 0px;
+  position: relative;
 }
 .l-categories.m--horizontal {
-  padding: 64px 0px 0px;
   flex: 1 1 auto;
   display: flex;
 }
-.l-categories .m-category {
-  padding: 30px 15px;
-  border-bottom: 1px solid #eee;
+.l-categories.m--horizontal .categoriesWrapper {
+  flex-direction: row;
 }
-.l-categories .m-category:last-child {
-  margin: 0px;
-  border-bottom: 0;
+.l-categories .categoriesWrapper {
+  display: flex;
+  padding: 0px;
+  max-width: 100%;
+  overflow-x: auto;
+  flex-direction: column;
 }
 
 .m-form {
@@ -266,6 +266,11 @@ body {
 .m-search.m--onHeader {
   margin-right: 10px;
 }
+@media (max-width: 480px) {
+  .m-search.m--onHeader {
+    display: none;
+  }
+}
 .m-search .searchInput {
   height: 35px;
   padding: 0 10px;
@@ -278,36 +283,73 @@ body {
 
 .m-category {
   transition: background-color 0.3s ease-in-out;
+  padding: 30px 15px;
+  border-bottom: 1px solid #eee;
+}
+@media (max-width: 480px) {
+  .m-category {
+    min-width: 100%;
+    padding: 20px 0 30px;
+  }
+}
+.m-category:last-child {
+  margin: 0px;
+  border-bottom: 0;
 }
 .m-category.m--placeholder {
   display: flex;
   justify-content: center;
   align-items: center;
-  transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
   cursor: pointer;
 }
-.m-category.m--placeholder:hover {
-  background-color: #57cdbd;
+.m-category.m--placeholder.m--horizontal {
+  padding: 30px;
+}
+.m-category.m--placeholder .addText {
+  padding: 15px;
+  border-radius: 5px;
+  transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out, padding 0.3s ease-in-out;
+}
+.m-category.m--placeholder:hover .addText {
+  background-color: #9effcd;
   color: #366f87;
+  letter-spacing: -0.01rem;
+  font-weight: 600;
+  padding: 20px;
 }
 .m-category.m--horizontal {
   min-width: 600px;
   border-bottom: 0;
   border-right: 1px solid #eee;
-  padding: 30px 30px;
+  padding: 30px 30px 60px;
   overflow-y: auto;
+}
+@media (max-width: 480px) {
+  .m-category.m--horizontal {
+    min-width: 100vw;
+    padding: 20px 20px 30px;
+  }
 }
 .m-category.m--horizontal.m--placeholder {
   min-width: 300px;
 }
-.m-category.m--horizontal.m--placeholder:hover {
-  background-color: #9effcd;
+.m-category.m--horizontal .sticketsWrapper .m-sticket {
+  flex: 1 1 calc(50% - 15px);
+}
+.m-category.m--masonry .sticketsWrapper {
+  display: block;
+  margin: 0;
 }
 .m-category .categoryHeader {
   display: flex;
   align-items: center;
   justify-content: space-between;
   margin-bottom: 30px;
+}
+@media (max-width: 480px) {
+  .m-category .categoryHeader {
+    flex-direction: column;
+  }
 }
 .m-category .categoryHeader .categoryName {
   font-size: 1.8rem;
@@ -323,6 +365,11 @@ body {
   align-items: center;
   opacity: 0;
   transition: opacity 0.3s ease-in-out;
+}
+@media (max-width: 960px) {
+  .m-category .categoryHeader .categoryActions {
+    opacity: 1;
+  }
 }
 .m-category .categoryHeader .categoryActions .action {
   margin-right: 15px;
@@ -357,13 +404,6 @@ body {
   margin: 0 -15px;
   position: relative;
 }
-.m-category.m--masonry .sticketsWrapper {
-  display: block;
-  margin: 0;
-}
-.m-category.m--horizontal .sticketsWrapper .m-sticket {
-  flex: 1 1 calc(50% - 15px);
-}
 .m-category:hover .categoryHeader .categoryActions {
   opacity: 1;
 }
@@ -381,13 +421,27 @@ body {
   background-color: #FFF;
   box-shadow: 0 5px 10px -5px rgba(0, 0, 0, 0.1);
 }
+@media (max-width: 480px) {
+  .m-sticket {
+    flex: 1 1 100%;
+    max-width: 100%;
+  }
+}
 .m-sticket:hover .sticketActions {
   opacity: 1;
 }
 .m-sticket.m--masonry {
+  opacity: 0;
   margin: 0;
   flex-basis: 50%;
-  transition: left 0.3s ease-in-out, top 0.3s ease-in-out;
+  transition: left 0.3s ease-in-out, top 0.3s ease-in-out, opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
+}
+.m-sticket.m--masonry:not(.m--placeholder) {
+  transform: scale(1.1);
+}
+.m-sticket.m--masonry[data-macy-complete="1"]:not(.m--placeholder) {
+  opacity: 1;
+  transform: scale(1);
 }
 .m-sticket .sticketTitle {
   font-weight: bold;
@@ -406,6 +460,11 @@ body {
   right: 15px;
   transform: translateY(-50%);
   transition: opacity 0.3s ease-in-out;
+}
+@media (max-width: 960px) {
+  .m-sticket .sticketActions {
+    opacity: 1;
+  }
 }
 .m-sticket .sticketActions .action {
   width: 35px;
@@ -436,6 +495,11 @@ body {
   flex-direction: column;
   transition: opacity 0.3s ease-in-out;
 }
+@media (max-width: 960px) {
+  .m-sticket.m--placeholder {
+    opacity: 1;
+  }
+}
 .m-sticket.m--placeholder.m--hasData {
   opacity: 1;
 }
@@ -455,6 +519,7 @@ body {
   flex: 1 0 auto;
   min-height: 70px;
   color: #666;
+  resize: none;
 }
 .m-sticket.m--placeholder .sticketSubmit {
   position: absolute;
@@ -471,6 +536,49 @@ body {
 .m-sticket.m--placeholder .sticketSubmit:hover {
   background-color: #366f87;
   color: #9effcd;
+}
+
+.m-overlap {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+}
+.m-overlap.m--noCategories {
+  background-color: #fafafa;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.m-overlap .overlapContent {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.m-overlap .overlapContent .emoji {
+  font-size: 4rem;
+  margin-bottom: 15px;
+}
+.m-overlap .overlapContent .overlapTitle {
+  font-weight: 500;
+  font-size: 1.4rem;
+  margin-bottom: 15px;
+}
+.m-overlap .overlapContent .overlapDescription {
+  font-size: 1.2rem;
+  line-height: 1.6rem;
+  margin-bottom: 30px;
+}
+.m-overlap .overlapContent .overlapAction {
+  cursor: pointer;
+  padding: 15px;
+  border-radius: 5px;
+  background-color: #366f87;
+  color: #fafafa;
 }
 
 .m-madeWithLove .love {

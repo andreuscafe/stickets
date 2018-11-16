@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html>
+
 <head>
 	<title>Simple stickets</title>
 	<meta name="viewport" content="initial-scale=1">
 
 	<link rel="stylesheet" href="css/styles.css">
 </head>
+
 <body>
 
 	<div id="app" class="appWrapper" :class="{'m--horizontal': store.state.horizontalLayout}">
@@ -15,14 +17,14 @@
 			<div class="contentWrapper">
 				<div class="headerWrapper">
 					<div class="appTitle">Stickets</div>
-					
+
 					<div class="m-search m--onHeader">
 						<input type="text" class="searchInput" placeholder="Buscar...">
 					</div>
 
 					<div class="actionsWrapper">
 						<div class="action m--actionToggleLayout" @click="toggleOrientation">
-							TL
+							💅
 						</div>
 
 						<div class="m-add">
@@ -55,55 +57,65 @@
 		</header>
 
 		<section class="l-categories" :class="{'m--horizontal': store.state.horizontalLayout}">
-			<div class="contentWrapper" :class="{'m--horizontal': store.state.horizontalLayout}">
-				<div class="m-category"
-					:class="{
-						'js-masonry m--masonry': store.state.masonryLayout,
-						'm--horizontal': store.state.horizontalLayout
-					}"
-					@drop.prevent="dropSticket"
-					@dragover.prevent="allowDrop"
-					@dragenter.prevent.stop="dragEnter"
-					@dragleave.prevent.stop="dragLeave"
-					v-for="category in store.state.categories"
-					:data-key="category.key">
-					<div class="categoryHeader">
-						<h1 class="categoryName">{{category.name}} <span class="categoryCount">({{category.stickets.length}})</span></h1>
-						<div class="categoryActions">
-							<div class="renameAction action" @click="renameCategory(category.key)">Renombrar</div>
-							<div class="renameAction action" @click="clearCategoryStickets(category.key)" v-if="category.stickets.length > 0">Limpiar stickets</div>
-							<div class="removeAction action" @click="removeCategory(category.key)">✕</div>
+			<div class="m-overlap m--noCategories" v-if="!store.state.categories.length">
+				<div class="contentWrapper">
+					<div class="overlapContent">
+						<div class="emoji">😅</div>
+						<h3 class="overlapTitle">No hay categorías!</h3>
+						<div class="overlapDescription">
+							Sin categorías no haces nada en esta app, básicamente. <br> Vas a necesitar algunas.
 						</div>
-					</div>
-					<div class="sticketsWrapper">
-						<div class="m-sticket"
-							draggable="true"
-							v-on:dragstart="dragSticket"
-							v-for="(sticket, index) in category.stickets"
-							:data-key="sticket.key"
-							:class="{'m--masonry': store.state.masonryLayout}" >
-							<div class="sticketActions">
-								<div class="action m--actionDelete" @click="category.stickets.splice(index, 1)">✕</div>
-							</div>
-							<div class="sticketTitle">{{sticket.title}}</div>
-							<div class="sticketDescription">{{sticket.description}}</div>
-						</div>
-
-						<!-- Placeholder para agregar nuevos -->
-						<div class="m-sticket m--placeholder"
-							:class="{
-								's--hasData': formHasData,
-								'm--masonry': store.state.masonryLayout
-							}">
-							<input class="sticketTitle" placeholder="Agregar sticket" v-model="form.title">
-							<textarea class="sticketDescription" placeholder="Escribí algo útil..." v-model="form.description"></textarea>
-							<div class="sticketSubmit" @click="addSticket(category.key)" v-show="formHasData">Agregar</div>
+						<div class="overlapAction" @click="addCategory">
+							Bueno, a ver...
 						</div>
 					</div>
 				</div>
+			</div>
 
-				<div class="m-category m--placeholder m--horizontal" @click="addCategory">
-					<div class="addText">Agregar una categoría</div>
+			<div class="contentWrapper" :class="{'m--horizontal': store.state.horizontalLayout}">
+				<div class="categoriesWrapper">
+					<div class="m-category" :class="{
+						'js-masonry m--masonry': store.state.masonryLayout,
+						'm--horizontal': store.state.horizontalLayout
+					}"
+					 @drop.prevent="dropSticket" @dragover.prevent="allowDrop" @dragenter.prevent.stop="dragEnter"
+					 @dragleave.prevent.stop="dragLeave" v-for="category in store.state.categories" :data-key="category.key">
+						<div class="categoryHeader">
+							<h1 class="categoryName">{{category.name}} <span class="categoryCount">({{category.stickets.length}})</span></h1>
+							<div class="categoryActions">
+								<div class="renameAction action" @click="renameCategory(category.key)">Renombrar</div>
+								<div class="renameAction action" @click="clearCategoryStickets(category.key)" v-if="category.stickets.length > 0">Limpiar
+									stickets</div>
+								<div class="removeAction action" @click="removeCategory(category.key)">✕</div>
+							</div>
+						</div>
+						<div class="sticketsWrapper">
+							<div class="m-sticket" draggable="true" v-on:dragstart="dragSticket" v-for="(sticket, index) in category.stickets"
+							 :data-key="sticket.key" :class="{'m--masonry': store.state.masonryLayout}">
+								<div class="sticketActions">
+									<div class="action m--actionDelete" @click="category.stickets.splice(index, 1)">✕</div>
+								</div>
+								<div class="sticketTitle">{{sticket.title}}</div>
+								<div class="sticketDescription">{{sticket.description}}</div>
+							</div>
+
+							<!-- Placeholder para agregar nuevos -->
+							<div class="m-sticket m--placeholder" :class="{
+								's--hasData': formHasData,
+								'm--masonry': store.state.masonryLayout
+							}">
+								<input class="sticketTitle" placeholder="Agregar sticket" v-model="form.title">
+								<textarea class="sticketDescription" placeholder="Escribí algo útil..." v-model="form.description"></textarea>
+								<div class="sticketSubmit" @click="addSticket(category.key)" v-show="formHasData">Agregar</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="m-category m--placeholder" @click="addCategory" :class="{
+							'm--horizontal': store.state.horizontalLayout
+						}">
+						<div class="addText">Agregar una categoría</div>
+					</div>
 				</div>
 			</div>
 		</section>
@@ -111,9 +123,9 @@
 		<footer class="l-footer">
 			<div class="m-madeWithLove">
 				Hecho con <span class="love"><svg class="heart" viewBox="0 0 32 29.6">
-  <path d="M23.6,0c-3.4,0-6.3,2.7-7.6,5.6C14.7,2.7,11.8,0,8.4,0C3.8,0,0,3.8,0,8.4c0,9.4,9.5,11.9,16,21.2
-	c6.1-9.3,16-12.1,16-21.2C32,3.8,28.2,0,23.6,0z"/>
-</svg></span> por <a class="loveName" target="_blank" alt="AndreusCafe" href="https://twitter.com/andreuscafe">@andreuscafe</a>
+						<path d="M23.6,0c-3.4,0-6.3,2.7-7.6,5.6C14.7,2.7,11.8,0,8.4,0C3.8,0,0,3.8,0,8.4c0,9.4,9.5,11.9,16,21.2
+	c6.1-9.3,16-12.1,16-21.2C32,3.8,28.2,0,23.6,0z" />
+					</svg></span> por <a class="loveName" target="_blank" alt="AndreusCafe" href="https://twitter.com/andreuscafe">@andreuscafe</a>
 			</div>
 		</footer>
 	</div>
@@ -133,18 +145,20 @@
 				stickets: [],
 				categories: []
 			},
-			toggleOrientation () {
+			toggleOrientation(callback) {
 				if (this.debug) console.log('Changed orientation');
 				this.state.horizontalLayout = !this.state.horizontalLayout;
+
+				if (callback) callback();
 			},
-			toggleMasonry () {
+			toggleMasonry() {
 				if (this.debug) console.log('Toggled masonry layout');
 				this.state.masonryLayout = !this.state.masonryLayout;
 			},
-			addSticket (title, description, categoryKey) {
-				if (this.debug) console.log('addSticket triggered with title "'+ title +'" and description "'+ description+'" on category '+categoryKey);
+			addSticket(title, description, categoryKey) {
+				if (this.debug) console.log('addSticket triggered with title "' + title + '" and description "' + description + '" on category ' + categoryKey);
 
-				for (let i = 0; i < this.state.categories.length; i++) {
+				for (let i = 0; i < this.state.categories.length; i++) {
 					if (this.state.categories[i].key === categoryKey) {
 						this.state.categories[i].stickets.push({
 							key: new Date().getTime(),
@@ -156,9 +170,9 @@
 					}
 				}
 			},
-			addCategory (name, callback) {
-				if (this.debug) console.log('addCategory triggered with name: '+ name);
-				
+			addCategory(name, callback) {
+				if (this.debug) console.log('addCategory triggered with name: ' + name);
+
 				let newCategory = {
 					key: new Date().getTime(),
 					name: name,
@@ -167,19 +181,17 @@
 
 				this.state.categories.push(newCategory);
 
-				if(callback) callback(this.state.categories.find(instance => {
-					return instance.key == newCategory.key
-				}));
+				if (callback) callback(this.getCategory(newCategory.key));
 			},
-			moveSticket (sticketKey, fromKey, toKey) {
+			moveSticket(sticketKey, fromKey, toKey) {
 				if (this.debug) {
 					// statement
-					console.log("Dragged sticket "+sticketKey+" from category "+fromKey+" to category "+toKey);
+					console.log("Dragged sticket " + sticketKey + " from category " + fromKey + " to category " + toKey);
 				}
 
 				let fromCat = this.getCategory(fromKey);
 
-				for(let i = 0; i < fromCat.stickets.length; i++){
+				for (let i = 0; i < fromCat.stickets.length; i++) {
 					if (fromCat.stickets[i].key == sticketKey) {
 						var sticket = fromCat.stickets.splice(i, 1);
 
@@ -187,34 +199,36 @@
 					}
 				}
 			},
-			clearAllStickets () {
+			clearAllStickets() {
 				if (this.debug) {
 					console.log("All stickets removed!");
 				}
 
-				for(let i = 0, length1 = this.state.categories.length; i < length1; i++){
+				for (let i = 0, length1 = this.state.categories.length; i < length1; i++) {
 					this.state.categories[i].stickets = []
 				}
 			},
-			clearCategoryStickets (categoryKey) {
+			clearCategoryStickets(categoryKey) {
 				if (this.debug) {
-					console.log("All stickets from category "+categoryKey+" removed!");
+					console.log("All stickets from category " + categoryKey + " removed!");
 				}
 				this.getCategory(categoryKey).stickets = []
 			},
-			clearCategory (categoryKey, callback) {
+			clearCategory(categoryKey, callback) {
 				if (this.debug) {
-					console.log("Category "+categoryKey+" removed!");
+					console.log("Category " + categoryKey + " removed!");
 				}
 
 				store.state.categories.splice(store.state.categories.findIndex(category => category.key == categoryKey), 1);
 
 				if (callback) callback();
 			},
-			renameCategory (categoryKey, newName) {
-				this.getCategory(categoryKey).name = newName;
+			renameCategory(categoryKey, newName) {
+				if (newName) {
+					this.getCategory(categoryKey).name = newName;
+				}
 			},
-			getCategory (categoryKey) {
+			getCategory(categoryKey) {
 				return store.state.categories.filter((cat) => {
 					return cat.key == categoryKey
 				})[0]
@@ -237,20 +251,33 @@
 			},
 			methods: {
 				toggleOrientation() {
-					this.store.toggleOrientation();
+					this.store.toggleOrientation(() => {
+						if (this.store.state.masonryLayout) {
+							this.store.state.categories.forEach((cat) => {
+								this.$nextTick().then(() => {
+									this.refreshMacy();
+								})
+							})
+
+						}
+					});
 				},
 				refreshMacy(categoryKey) {
-					if (this.store.state.masonryLayout) {
-						if (this.macyInstances) {
+					if (this.store.state.masonryLayout && this.macyInstances) {
+						if (categoryKey) {
 							let instance = this.macyInstances.find(instance => {
 								return instance.key == categoryKey
 							});
 							if (instance) {
-								instance.macy.recalculate(true)
-								if (this.store.debug) console.log("Macy recalculated on cat ",categoryKey);
+								instance.macy.recalculate(true);
+								if (this.store.debug) console.log("Macy recalculated on cat ", categoryKey);
 							} else {
-								if (this.store.debug) console.log("There's no instance with key ",categoryKey)
+								if (this.store.debug) console.log("There's no instance with key ", categoryKey)
 							}
+						} else {
+							this.macyInstances.forEach(instance => {
+								instance.macy.recalculate(true);
+							})
 						}
 					}
 				},
@@ -281,17 +308,17 @@
 					}));
 				},
 
-				allowDrop(e) {},
+				allowDrop(e) { },
 
 				dragEnter(e) {
 					let childNodes = e.target.closest(".m-category").querySelectorAll("*");
-					for(let i = 0; i < childNodes.length; i++) { childNodes[i].style.pointerEvents = "none" }
+					for (let i = 0; i < childNodes.length; i++) { childNodes[i].style.pointerEvents = "none" }
 					e.target.closest(".m-category").style.backgroundColor = "rgba(0, 0, 0, 0.1)";
 				},
 
 				dragLeave(e) {
 					let childNodes = e.target.closest(".m-category").querySelectorAll("*");
-					for(let i = 0; i < childNodes.length; i++) { childNodes[i].style.pointerEvents = "initial" }
+					for (let i = 0; i < childNodes.length; i++) { childNodes[i].style.pointerEvents = "initial" }
 					e.target.closest(".m-category").style.backgroundColor = "transparent";
 				},
 
@@ -303,7 +330,7 @@
 
 					let childNodes = e.target.closest(".m-category").querySelectorAll("*");
 
-					for(let i = 0; i < childNodes.length; i++) { childNodes[i].style.pointerEvents = "initial" }
+					for (let i = 0; i < childNodes.length; i++) { childNodes[i].style.pointerEvents = "initial" }
 
 					this.store.moveSticket(sticketData.sticketKey, sticketData.categoryKey, newCategoryKey)
 				},
@@ -320,7 +347,7 @@
 				removeCategory(categoryKey) {
 					this.store.clearCategory(categoryKey, () => {
 						if (this.store.state.masonryLayout) {
-							this.macyInstances.splice(this.macyInstances.findIndex((instance) => {return instance.key == categoryKey}))
+							this.macyInstances.splice(this.macyInstances.findIndex((instance) => { return instance.key == categoryKey }))
 						}
 					})
 				},
@@ -342,14 +369,23 @@
 					this.macyInstances.push({
 						key: category.key,
 						macy: Macy({
-							container: '.js-masonry[data-key="'+category.key+'"] .sticketsWrapper',
+							container: '.js-masonry[data-key="' + category.key + '"] .sticketsWrapper',
 							trueOrder: false,
 							waitForImages: false,
+							columns: 2,
 							margin: {
 								x: 15,
 								y: 20
 							},
-							columns: 2
+							breakAt: {
+								480: {
+									margin: {
+										x: 0,
+										y: 30,
+									},
+									columns: 1
+								}
+							}
 						})
 					})
 				},
@@ -357,10 +393,10 @@
 				addCategoryWatcher(category) {
 					this.categoryWatchers.push({
 						key: category.key,
-						watcher: this.$watch(['store.state.categories', this.store.state.categories.indexOf(category)].join("."), function() {
-							if (_debug) console.log("Category "+category.key+" changed!");
+						watcher: this.$watch(['store.state.categories', this.store.state.categories.indexOf(category)].join("."), function () {
+							if (_debug) console.log("Category " + category.key + " changed!");
 							this.refreshMacy(category.key)
-						}, {deep: true})
+						}, { deep: true })
 					});
 				}
 			},
@@ -385,21 +421,22 @@
 				}
 			},
 			computed: {
-				formHasData: function() {
+				formHasData: function () {
 					return !!this.form.title || !!this.form.description
 				}
 			}
 		})
 
-		vm.$watch('store.state', function() {
+		vm.$watch('store.state', function () {
 			if (_debug) console.log("Store has changed!");
 
 			localStorage.setItem("storeState", JSON.stringify(store.state))
-		}, {deep: true})
-		
-		vm.$watch('store.state.categories', function(oldValue, newValue) {
+		}, { deep: true })
+
+		vm.$watch('store.state.categories', function (oldValue, newValue) {
 			console.log(oldValue.lenght == newValue.lenght)
 		});
 	</script>
 </body>
+
 </html>

@@ -9,6 +9,11 @@
 	background-color: #FFF;
 	@include h-boxShadow;
 
+	@include mobile {
+		flex: 1 1 100%;
+		max-width: 100%;
+	}
+
 	&:hover {
 		.sticketActions {
 			opacity: 1;
@@ -16,9 +21,22 @@
 	}
 
 	&.m--masonry {
+		opacity: 0;
 		margin: 0;
 		flex-basis: 50%;
-		transition: left 0.3s ease-in-out, top 0.3s ease-in-out;
+		transition: left 0.3s ease-in-out,
+			top 0.3s ease-in-out,
+			opacity 0.5s ease-in-out,
+			transform 0.5s ease-in-out;
+
+		&:not(.m--placeholder) {
+			transform: scale(1.1);
+		}
+
+		&[data-macy-complete="1"]:not(.m--placeholder) {
+			opacity: 1;
+			transform: scale(1);
+		}
 	}
 
 	.sticketTitle {
@@ -41,6 +59,10 @@
 		transform: translateY(-50%);
 		transition: opacity 0.3s ease-in-out;
 
+		@include tablet {
+			opacity: 1;
+		}
+
 		.action {
 			width: 35px;
 			height: 35px;
@@ -58,9 +80,9 @@
 				color: #fefefe;
 			}
 
-			&.m--actionDelete {
+			// &.m--actionDelete {
 
-			}
+			// }
 		}
 	}
 
@@ -76,6 +98,10 @@
 		align-items: center;
 		flex-direction: column;
 		transition: opacity 0.3s ease-in-out;
+
+		@include tablet {
+			opacity: 1;
+		}
 
 		&.m--hasData {
 			opacity: 1;
@@ -99,6 +125,7 @@
 			flex: 1 0 auto;
 			min-height: 70px;
 			color: #666;
+			resize: none;
 		}
 
 		.sticketSubmit {

@@ -1,20 +1,22 @@
 .l-categories {
+	flex: 1 1 auto;
 	background-color: #fafafa;
-	padding: 60px 0px;
+	position: relative;
 
 	&.m--horizontal {
-		padding: 64px 0px 0px;
 		flex: 1 1 auto;
 		display: flex;
+
+		.categoriesWrapper {
+			flex-direction: row;
+		}
 	}
 
-	.m-category {
-		padding: 30px 15px;
-		border-bottom: 1px solid #eee;
-
-		&:last-child {
-			margin: 0px;
-			border-bottom: 0;
-		}
+	.categoriesWrapper {
+		display: flex;
+		padding: 0px;
+		max-width: 100%;
+		overflow-x: auto;
+		flex-direction: column;
 	}
 }

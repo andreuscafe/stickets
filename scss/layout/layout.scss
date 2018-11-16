@@ -6,24 +6,25 @@ body {
 .appWrapper {
 	width: 100vw;
 	height: 100vh;
-	padding: 64px 0 0 0;
+	display: flex;
+	flex-direction: column;
 
 	&.m--horizontal {
-		display: flex;
-		flex-direction: column;
 		padding: 0px;
 	}
 }
 
 .contentWrapper {
 	margin: 0 auto;
-	padding: 0 15px;
+	padding: 0 20px;
 
 	&.m--horizontal {
 		padding: 0px;
 		display: flex;
 		max-width: 100%;
+		min-width: 100%;
 		overflow-x: auto;
+		justify-content: flex-start;
 	}
 
 	&:not(.m--horizontal) {

@@ -1,6 +1,10 @@
 .m-search {
 	&.m--onHeader {
 		margin-right: 10px;
+
+		@include mobile {
+			display: none;
+		}
 	}
 
 	.searchInput {
