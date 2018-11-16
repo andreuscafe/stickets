@@ -1,5 +1,5 @@
 .m-sticket {
-	flex: 1 1 calc(33% - 15px);
+	flex: 1 1 calc(33.333% - 15px);
 	max-width: calc(50% - 15px);
 	margin: 0 7.5px 15px;
 	padding: 15px;
@@ -8,6 +8,11 @@
 
 	background-color: #FFF;
 	@include h-boxShadow;
+
+	// @include desktop {
+	// 	flex: 1 1 100%;
+	// 	max-width: calc(33.333% - 15px);
+	// }
 
 	@include mobile {
 		flex: 1 1 100%;
