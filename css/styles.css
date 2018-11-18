@@ -308,14 +308,12 @@ body {
 .m-category.m--placeholder .addText {
   padding: 15px;
   border-radius: 5px;
+  font-weight: 600;
   transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out, padding 0.3s ease-in-out;
 }
 .m-category.m--placeholder:hover .addText {
   background-color: #9effcd;
   color: #366f87;
-  letter-spacing: -0.01rem;
-  font-weight: 600;
-  padding: 20px;
 }
 .m-category.m--horizontal {
   min-width: 600px;
@@ -396,7 +394,7 @@ body {
 }
 .m-category .categoryHeader .categoryActions .removeAction:hover {
   background-color: #555;
-  color: #FFF;
+  color: #fff;
 }
 .m-category .sticketsWrapper {
   display: flex;

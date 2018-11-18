@@ -26,16 +26,15 @@
 		.addText {
 			padding: 15px;
 			border-radius: 5px;
-			transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out, padding 0.3s ease-in-out;
+			font-weight: 600;
+			transition: background-color 0.3s ease-in-out,
+				color 0.3s ease-in-out, padding 0.3s ease-in-out;
 		}
 
 		&:hover {
 			.addText {
 				background-color: $Palette1;
 				color: $Palette4;
-				letter-spacing: -.01rem;
-				font-weight: 600;
-				padding: 20px;
 			}
 		}
 	}
@@ -133,7 +132,7 @@
 
 				&:hover {
 					background-color: #555;
-					color: #FFF;
+					color: #fff;
 				}
 			}
 		}
