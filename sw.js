@@ -30,12 +30,12 @@ importScripts('/js/dependencies/cache-polyfill.js');
 // updated service worker is activated.
 
 var urlsToPrefetch = [
-	'/index.html',
-	'/js/',
-	'/js/macy.js',
-	'/js/vue.js',
-	'/js/vuex.js',
-	'/css/styles.css',
+	'./index.html',
+	'./js/',
+	'./js/macy.js',
+	'./js/vue.js',
+	'./js/vuex.js',
+	'./css/styles.css',
 ];
 
 var version = '1.0.5';
