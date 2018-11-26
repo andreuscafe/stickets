@@ -476,8 +476,8 @@ body {
   position: relative;
   white-space: pre-line;
   box-sizing: border-box;
-  margin: 0 0 1.1rem;
-  font-weight: bold;
+  margin: 0 0 0.5rem;
+  font-weight: 600;
   line-height: 1.7rem;
   color: #555;
   border: 0;
@@ -493,7 +493,7 @@ body {
   resize: none;
   outline: none;
   font-family: Avenir Next, Avenir, Tahoma, sans-serif;
-  font-weight: bold;
+  font-weight: 600;
   line-height: 1.7rem;
   color: #555;
   border: 0;
