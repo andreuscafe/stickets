@@ -27,6 +27,7 @@
 								type="text"
 								class="searchInput"
 								placeholder="Buscar..."
+								v-model="store.state.searchField"
 							/>
 						</div>
 
@@ -78,8 +79,9 @@
 												<option
 													v-for="category in store.state.categories"
 													:value="category.key"
-													>{{ category.name }}</option
 												>
+													{{ category.name }}
+												</option>
 											</select>
 										</label>
 										<button
@@ -110,7 +112,8 @@
 							<h3 class="overlapTitle">No hay categorías!</h3>
 							<div class="overlapDescription">
 								Sin categorías no haces nada en esta app,
-								básicamente. <br />
+								básicamente.
+								<br />
 								Vas a necesitar algunas.
 							</div>
 							<div class="overlapAction" @click="addCategory">
@@ -141,82 +144,85 @@
 							<div class="categoryHeader">
 								<h1 class="categoryName">
 									{{ category.name }}
-									<span class="categoryCount"
-										>({{ category.stickets.length }})</span
-									>
+									<!--
+										<span class="categoryCount"
+											>({{
+												category.filteredStickets.length
+													? category.filteredStickets
+															.length +
+													  '/' +
+													  category.stickets.length
+													: category.stickets.length
+											}})</span
+										>
+									-->
 								</h1>
 								<div class="categoryActions">
-									<div
-										class="renameAction action"
-										@click="renameCategory(category.key)"
-									>
-										Renombrar
-									</div>
-									<div
-										class="renameAction action"
+									<div class="renameAction action" @click="renameCategory(category.key)">Renombrar</div>
+									<div class="renameAction action"
 										@click="clearCategoryStickets(category.key)"
-										v-if="category.stickets.length > 0"
-									>
-										Limpiar stickets
+										v-if="category.stickets.length > 0">
+										Vaciar
 									</div>
-									<div
-										class="removeAction action"
-										@click="removeCategory(category.key)"
-									>
-										✕
-									</div>
+									<div class="removeAction action" @click="removeCategory(category.key)">✕</div>
 								</div>
 							</div>
-							<div class="sticketsWrapper">
+							<div class="sticketsWrapper"
+								:class="{'m--masonry': store.state.masonryLayout}"
+							>
 								<div
 									class="m-sticket"
 									draggable="true"
 									v-on:dragstart="dragSticket"
-									v-for="(sticket, index) in category.stickets"
+									v-for="(sticket, index) in sticketsFiltered(category)"
 									:data-key="sticket.key"
 									:class="{'m--masonry': store.state.masonryLayout}"
 								>
 									<div class="sticketActions">
-										<div
-											class="action m--actionDelete"
-											@click="category.stickets.splice(index, 1)"
-										>
-											✕
-										</div>
+										<div class="action m--actionDelete" @click="deleteSticket(sticket.key, category.key)">✕</div>
 									</div>
-									<div class="sticketTitle">
-										{{ sticket.title }}
+									<div class="titleWrapper">
+										<pre class="titleSizer">{{ sticket.title }}<textarea class="sticketTitle" v-model="sticket.title" spellcheck="false"></textarea>
+										</pre>
 									</div>
-									<div class="sticketDescription">
-										{{ sticket.description }}
+									<div class="descriptionWrapper">
+										<pre class="descriptionSizer">{{ sticket.description }}<textarea class="sticketDescription" v-model="sticket.description" spellcheck="false"></textarea>
+										</pre>
 									</div>
 								</div>
 
-								<!-- Placeholder para agregar nuevos -->
+								<!-- Placeholder for add new stickets -->
 								<div
 									class="m-sticket m--placeholder"
-									:class="{
-								's--hasData': formHasData,
-								'm--masonry': store.state.masonryLayout
-							}"
+									:class="{ 's--hasData': formHasData, 'm--masonry': store.state.masonryLayout}"
+									v-if="!store.state.searchField"
 								>
 									<input
 										class="sticketTitle"
 										placeholder="Agregar sticket"
 										v-model="form.title"
+										spellcheck="false"
 									/>
-									<textarea
+									<div class="textAreaWrapper">{{ form.description }}
+										<textarea
 										class="sticketDescription"
 										placeholder="Escribí algo útil..."
 										v-model="form.description"
-									></textarea>
+										spellcheck="false"></textarea>
+									</div>
 									<div
 										class="sticketSubmit"
 										@click="addSticket(category.key)"
-										v-show="formHasData"
-									>
-										Agregar
-									</div>
+										v-show="formHasData">Agregar</div>
+								</div>
+
+								<div
+									class="noResults"
+									v-if="!sticketsFiltered(category).length && store.state.searchField"
+								>
+									No hay stickets que contengan "{{
+										store.state.searchField.toLowerCase()
+									}}"
 								</div>
 							</div>
 						</div>
@@ -237,28 +243,30 @@
 			<footer class="l-footer">
 				<div class="m-madeWithLove">
 					Hecho con
-					<span class="love"
-						><svg class="heart" viewBox="0 0 32 29.6">
+					<span class="love">
+						<svg class="heart" viewBox="0 0 32 29.6">
 							<path
 								d="M23.6,0c-3.4,0-6.3,2.7-7.6,5.6C14.7,2.7,11.8,0,8.4,0C3.8,0,0,3.8,0,8.4c0,9.4,9.5,11.9,16,21.2
-	c6.1-9.3,16-12.1,16-21.2C32,3.8,28.2,0,23.6,0z"
-							/></svg
-					></span>
+c6.1-9.3,16-12.1,16-21.2C32,3.8,28.2,0,23.6,0z"
+							/>
+						</svg>
+					</span>
 					por
 					<a
 						class="loveName"
 						target="_blank"
 						alt="AndreusCafe"
 						href="https://twitter.com/andreuscafe"
-						>@andreuscafe</a
 					>
+						@andreuscafe
+					</a>
 				</div>
 			</footer>
 		</div>
 
 		<script src="js/vue.js"></script>
 		<script src="js/macy.js"></script>
-		<script src="js/vuex.js"></script>
+		<!-- <script src="js/vuex.js"></script> -->
 
 		<script src="js/index.js"></script>
 

@@ -1,6 +1,6 @@
 .l-categories {
 	flex: 1 1 auto;
-	background-color: #fafafa;
+	background-color: #f0f0f0;
 	position: relative;
 
 	&.m--horizontal {
@@ -18,5 +18,9 @@
 		max-width: 100%;
 		overflow-x: auto;
 		flex-direction: column;
+
+		@include mobile {
+			scroll-snap-type: x mandatory;
+		}
 	}
 }

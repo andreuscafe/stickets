@@ -1,6 +1,6 @@
 .m-category {
 	transition: background-color 0.3s ease-in-out;
-	padding: 30px 15px;
+	padding: 30px 0;
 	border-bottom: 1px solid #eee;
 
 	@include mobile {
@@ -42,13 +42,14 @@
 	&.m--horizontal {
 		min-width: 600px;
 		border-bottom: 0;
-		border-right: 1px solid #eee;
+		border-right: 1px solid #e0e0e0;
 		padding: 30px 30px 60px;
 		overflow-y: auto;
 
 		@include mobile {
 			min-width: 100vw;
 			padding: 20px 20px 30px;
+			scroll-snap-align: center;
 		}
 
 		&.m--placeholder {
@@ -71,7 +72,7 @@
 
 	.categoryHeader {
 		display: flex;
-		align-items: center;
+		align-items: flex-start;
 		justify-content: space-between;
 		margin-bottom: 30px;
 
@@ -80,9 +81,14 @@
 		}
 
 		.categoryName {
+			padding-right: 15px;
 			font-size: 1.8rem;
 			line-height: 2.4rem;
 			color: $Palette4;
+
+			@include mobile {
+				padding: 0;
+			}
 
 			.categoryCount {
 				font-size: 1.6rem;
@@ -93,6 +99,7 @@
 		.categoryActions {
 			display: flex;
 			align-items: center;
+			margin-top: 0.45rem;
 
 			opacity: 0;
 			transition: opacity 0.3s ease-in-out;
@@ -141,8 +148,20 @@
 	.sticketsWrapper {
 		display: flex;
 		flex-wrap: wrap;
-		margin: 0 -15px;
 		position: relative;
+		margin: 0 -7.5px;
+
+		&.m--masonry {
+			margin: 0;
+		}
+
+		.noResults {
+			width: 100% !important;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			padding: 20px;
+		}
 	}
 
 	&:hover {

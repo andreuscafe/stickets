@@ -82,7 +82,7 @@ body {
 }
 @media (min-width: 1441px) {
   .contentWrapper:not(.m--horizontal) {
-    max-width: 1600px;
+    max-width: 1200px;
   }
 }
 @media (max-width: 1440px) {
@@ -114,7 +114,8 @@ body {
 .l-header .headerWrapper .appTitle {
   font-weight: 900;
   font-size: 1.6rem;
-  color: #FFF;
+  color: #fff;
+  text-shadow: 2px 2px 0px #57cdbd, 3px 3px 7px #31a696;
 }
 .l-header .headerWrapper .actionsWrapper {
   display: flex;
@@ -129,7 +130,7 @@ body {
   border-radius: 5px;
   margin-right: 15px;
   font-size: 1.4rem;
-  color: #FFF;
+  color: #fff;
   font-weight: 900;
   cursor: pointer;
   background-color: #31a696;
@@ -186,7 +187,7 @@ body {
 
 .l-categories {
   flex: 1 1 auto;
-  background-color: #fafafa;
+  background-color: #f0f0f0;
   position: relative;
 }
 .l-categories.m--horizontal {
@@ -202,6 +203,11 @@ body {
   max-width: 100%;
   overflow-x: auto;
   flex-direction: column;
+}
+@media (max-width: 480px) {
+  .l-categories .categoriesWrapper {
+    scroll-snap-type: x mandatory;
+  }
 }
 
 .m-form {
@@ -283,7 +289,7 @@ body {
 
 .m-category {
   transition: background-color 0.3s ease-in-out;
-  padding: 30px 15px;
+  padding: 30px 0;
   border-bottom: 1px solid #eee;
 }
 @media (max-width: 480px) {
@@ -318,7 +324,7 @@ body {
 .m-category.m--horizontal {
   min-width: 600px;
   border-bottom: 0;
-  border-right: 1px solid #eee;
+  border-right: 1px solid #e0e0e0;
   padding: 30px 30px 60px;
   overflow-y: auto;
 }
@@ -326,6 +332,7 @@ body {
   .m-category.m--horizontal {
     min-width: 100vw;
     padding: 20px 20px 30px;
+    scroll-snap-align: center;
   }
 }
 .m-category.m--horizontal.m--placeholder {
@@ -340,7 +347,7 @@ body {
 }
 .m-category .categoryHeader {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
   margin-bottom: 30px;
 }
@@ -350,9 +357,15 @@ body {
   }
 }
 .m-category .categoryHeader .categoryName {
+  padding-right: 15px;
   font-size: 1.8rem;
   line-height: 2.4rem;
   color: #366f87;
+}
+@media (max-width: 480px) {
+  .m-category .categoryHeader .categoryName {
+    padding: 0;
+  }
 }
 .m-category .categoryHeader .categoryName .categoryCount {
   font-size: 1.6rem;
@@ -361,6 +374,7 @@ body {
 .m-category .categoryHeader .categoryActions {
   display: flex;
   align-items: center;
+  margin-top: 0.45rem;
   opacity: 0;
   transition: opacity 0.3s ease-in-out;
 }
@@ -399,8 +413,18 @@ body {
 .m-category .sticketsWrapper {
   display: flex;
   flex-wrap: wrap;
-  margin: 0 -15px;
   position: relative;
+  margin: 0 -7.5px;
+}
+.m-category .sticketsWrapper.m--masonry {
+  margin: 0;
+}
+.m-category .sticketsWrapper .noResults {
+  width: 100% !important;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
 }
 .m-category:hover .categoryHeader .categoryActions {
   opacity: 1;
@@ -416,7 +440,8 @@ body {
   padding: 15px;
   border-radius: 5px;
   position: relative;
-  background-color: #FFF;
+  transition: box-shadow 0.3s ease-in-out;
+  background-color: #fff;
   box-shadow: 0 5px 10px -5px rgba(0, 0, 0, 0.1);
 }
 @media (max-width: 480px) {
@@ -425,14 +450,17 @@ body {
     max-width: 100%;
   }
 }
-.m-sticket:hover .sticketActions {
+.m-sticket:hover, .m-sticket:focus-within {
+  box-shadow: 0 5px 10px -2px rgba(0, 0, 0, 0.2);
+}
+.m-sticket:hover .sticketActions, .m-sticket:focus-within .sticketActions {
   opacity: 1;
 }
 .m-sticket.m--masonry {
   opacity: 0;
   margin: 0;
   flex-basis: 50%;
-  transition: left 0.3s ease-in-out, top 0.3s ease-in-out, opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
+  transition: left 0.3s ease-in-out, top 0.3s ease-in-out, width 0.3s ease-in-out, height 0.3s ease-in-out, opacity 0.5s ease-in-out, transform 0.5s ease-in-out, box-shadow 0.2s ease-in-out;
 }
 .m-sticket.m--masonry:not(.m--placeholder) {
   transform: scale(1.1);
@@ -441,15 +469,66 @@ body {
   opacity: 1;
   transform: scale(1);
 }
-.m-sticket .sticketTitle {
-  font-weight: bold;
-  margin-bottom: 15px;
-  line-height: 1.5rem;
-  color: #555;
+.m-sticket .titleWrapper {
+  z-index: 1;
 }
-.m-sticket .sticketDescription {
-  line-height: 1.5rem;
+.m-sticket .titleWrapper .titleSizer {
+  position: relative;
+  white-space: pre-line;
+  box-sizing: border-box;
+  margin: 0 0 1.1rem;
+  font-weight: bold;
+  line-height: 1.7rem;
+  color: #555;
+  border: 0;
+  font-size: 1.1rem;
+}
+.m-sticket .titleWrapper .titleSizer .sticketTitle {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  resize: none;
+  outline: none;
+  font-family: Avenir Next, Avenir, Tahoma, sans-serif;
+  font-weight: bold;
+  line-height: 1.7rem;
+  color: #555;
+  border: 0;
+  font-size: 1.1rem;
+}
+.m-sticket .descriptionWrapper {
+  z-index: 1;
+}
+.m-sticket .descriptionWrapper .descriptionSizer {
+  position: relative;
+  white-space: pre-line;
+  word-break: break-word;
+  box-sizing: border-box;
+  min-height: 1.7rem;
+  line-height: 1.7rem;
   color: #666;
+  border: 0;
+  font-size: 1.1rem;
+}
+.m-sticket .descriptionWrapper .descriptionSizer .sticketDescription {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  resize: none;
+  outline: none;
+  font-family: Avenir Next, Avenir, Tahoma, sans-serif;
+  line-height: 1.7rem;
+  white-space: pre-line;
+  word-break: break-word;
+  color: #666;
+  border: 0;
+  font-size: 1.1rem;
 }
 .m-sticket .sticketActions {
   opacity: 0;
@@ -458,6 +537,7 @@ body {
   right: 15px;
   transform: translateY(-50%);
   transition: opacity 0.3s ease-in-out;
+  z-index: 10;
 }
 @media (max-width: 960px) {
   .m-sticket .sticketActions {
@@ -469,6 +549,7 @@ body {
   height: 35px;
   background-color: #fff;
   border-radius: 50%;
+  box-shadow: 0px 5px 10px -3px #f0f0f0;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -491,40 +572,77 @@ body {
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  transition: opacity 0.3s ease-in-out;
+  transition: opacity 0.3s ease-in-out, border-color 0.3s ease-in-out;
+  padding: 0px;
 }
 @media (max-width: 960px) {
   .m-sticket.m--placeholder {
     opacity: 1;
   }
 }
+.m-sticket.m--placeholder:focus-within {
+  opacity: 1;
+  border-color: #5a5a5a;
+}
 .m-sticket.m--placeholder.m--hasData {
   opacity: 1;
 }
-.m-sticket.m--placeholder .sticketTitle, .m-sticket.m--placeholder .sticketDescription {
+.m-sticket.m--placeholder .sticketTitle,
+.m-sticket.m--placeholder .sticketDescription {
   min-width: 100%;
   max-width: 100%;
-  font-size: 1rem;
+  font-size: 1.1rem;
+  line-height: 1.7rem;
   border: 0;
+  box-sizing: border-box;
   background-color: transparent;
   outline: 0;
+  transition: background-color 0.3s ease-in-out;
+}
+.m-sticket.m--placeholder .sticketTitle:hover,
+.m-sticket.m--placeholder .sticketDescription:hover {
+  background-color: #fbfbfb;
+}
+.m-sticket.m--placeholder .sticketTitle:active, .m-sticket.m--placeholder .sticketTitle:focus,
+.m-sticket.m--placeholder .sticketDescription:active,
+.m-sticket.m--placeholder .sticketDescription:focus {
+  background-color: #fff;
 }
 .m-sticket.m--placeholder .sticketTitle {
   flex: 0 0 auto;
   color: #555;
+  padding: 15px;
+  margin-bottom: 0;
+  border-radius: 5px;
+  font-family: Avenir Next, Avenir, Tahoma, sans-serif;
 }
-.m-sticket.m--placeholder .sticketDescription {
-  flex: 1 0 auto;
+.m-sticket.m--placeholder .textAreaWrapper {
   min-height: 70px;
+  flex: 1 0 auto;
+  width: 100%;
+  position: relative;
+  padding: 15px;
+  white-space: pre-line;
+  word-break: break-word;
+  line-height: 1.7rem;
+  color: transparent;
+}
+.m-sticket.m--placeholder .textAreaWrapper .sticketDescription {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  padding: 15px;
+  font-family: Avenir Next, Avenir, Tahoma, sans-serif;
   color: #666;
   resize: none;
 }
 .m-sticket.m--placeholder .sticketSubmit {
   position: absolute;
-  bottom: 0;
-  right: 15px;
-  transform: translateY(50%);
-  background-color: #FFF;
+  top: calc(100% + 15px);
+  right: 0;
+  background-color: #fff;
   padding: 10px;
   border-radius: 5px;
   color: #366f87;

@@ -2,7 +2,7 @@
 	flex: 0 0 auto;
 
 	background-color: $secondaryColor;
-	
+
 	.headerWrapper {
 		display: flex;
 		align-items: center;
@@ -13,7 +13,9 @@
 		.appTitle {
 			font-weight: 900;
 			font-size: 1.6rem;
-			color: #FFF;
+			color: #fff;
+			text-shadow: 2px 2px 0px $secondaryColor,
+				3px 3px 7px darken($secondaryColor, 15%);
 		}
 
 		.actionsWrapper {
@@ -33,7 +35,7 @@
 				margin-right: 15px;
 
 				font-size: 1.4rem;
-				color: #FFF;
+				color: #fff;
 				font-weight: 900;
 				cursor: pointer;
 

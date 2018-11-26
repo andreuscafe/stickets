@@ -1,12 +1,14 @@
-const _debug = true;
+// Set _debug on true if you want to see the log of all actions
+const _debug = false;
 
 let store = {
-	debug: _debug !== undefined ? !!_debug : true,
+	debug: _debug !== undefined ? _debug : false,
 	state: localStorage.getItem('storeState')
 		? JSON.parse(localStorage.getItem('storeState'))
 		: {
-				horizontalLayout: false,
+				horizontalLayout: true,
 				masonryLayout: true,
+				searchField: '',
 				stickets: [],
 				categories: [],
 		  },
@@ -43,22 +45,34 @@ let store = {
 			}
 		}
 	},
+
+	deleteSticket(sticketKey, categoryKey) {
+		let category = this.getCategory(categoryKey);
+		category.stickets.splice(
+			category.stickets.findIndex(sticket => {
+				return sticket.key == sticketKey;
+			}),
+			1
+		);
+	},
+
 	addCategory(name, callback) {
 		if (this.debug) console.log('addCategory triggered with name: ' + name);
 
-		let newCategory = {
-			key: new Date().getTime(),
-			name: name,
-			stickets: [],
-		};
+		if (name) {
+			let newCategory = {
+				key: new Date().getTime(),
+				name: name,
+				stickets: [],
+			};
 
-		this.state.categories.push(newCategory);
+			this.state.categories.push(newCategory);
 
-		if (callback) callback(this.getCategory(newCategory.key));
+			if (callback) callback(this.getCategory(newCategory.key));
+		}
 	},
 	moveSticket(sticketKey, fromKey, toKey) {
 		if (this.debug) {
-			// statement
 			console.log(
 				'Dragged sticket ' +
 					sticketKey +
@@ -120,6 +134,11 @@ let store = {
 			return cat.key == categoryKey;
 		})[0];
 	},
+	getSticket(sticketKey, categoryKey) {
+		return this.getCategory(categoryKey).stickets.filter(sticket => {
+			return sticket.key == sticketKey;
+		})[0];
+	},
 };
 
 let vm = new Vue({
@@ -132,18 +151,16 @@ let vm = new Vue({
 		macyInstances: [],
 		categoryWatchers: [],
 		form: {
-			title: undefined,
-			description: undefined,
+			title: '',
+			description: '',
 		},
 	},
 	methods: {
 		toggleOrientation() {
 			this.store.toggleOrientation(() => {
 				if (this.store.state.masonryLayout) {
-					this.store.state.categories.forEach(cat => {
-						this.$nextTick().then(() => {
-							this.refreshMacy();
-						});
+					this.$nextTick().then(() => {
+						this.refreshMacy();
 					});
 				}
 			});
@@ -177,8 +194,7 @@ let vm = new Vue({
 		},
 		addSticket(categoryKey) {
 			if (
-				this.form.title &&
-				this.form.description &&
+				(this.form.title || this.form.description) &&
 				(categoryKey || this.form.categoryKey)
 			) {
 				this.store.addSticket(
@@ -194,6 +210,10 @@ let vm = new Vue({
 			} else {
 				console.log('Fill the fields!');
 			}
+		},
+
+		deleteSticket(sticketKey, categoryKey) {
+			this.store.deleteSticket(sticketKey, categoryKey);
 		},
 
 		clearStickets() {
@@ -291,7 +311,6 @@ let vm = new Vue({
 					this.addCategoryWatcher(ref);
 
 					if (this.store.state.masonryLayout) {
-						console.log(ref);
 						this.$nextTick().then(() => {
 							this.initializeMacy(ref);
 						});
@@ -313,7 +332,7 @@ let vm = new Vue({
 					columns: 2,
 					margin: {
 						x: 15,
-						y: 20,
+						y: 25,
 					},
 					breakAt: {
 						480: {
@@ -335,13 +354,15 @@ let vm = new Vue({
 					[
 						'store.state.categories',
 						this.store.state.categories.indexOf(category),
+						'stickets',
 					].join('.'),
 					function() {
 						if (_debug)
 							console.log(
 								'Category ' + category.key + ' changed!'
 							);
-						this.refreshMacy(category.key);
+						if (this.store.state.masonryLayout)
+							this.refreshMacy(category.key);
 					},
 					{ deep: true }
 				),
@@ -353,7 +374,7 @@ let vm = new Vue({
 			// Code that will run only after the
 			// entire view has been rendered
 
-			if (this.loading) {
+			if (this.loading && this.store.state.masonryLayout) {
 				this.store.state.categories.forEach(cat => {
 					this.initializeMacy(cat);
 				});
@@ -362,29 +383,57 @@ let vm = new Vue({
 			this.loading = false;
 		});
 
-		if (this.store.state.masonryLayout) {
+		if (this.store.state.masonryLayout && window.innerWidth > 480) {
 			this.store.state.categories.forEach(category => {
 				this.addCategoryWatcher(category);
 			});
 		}
+
+		this.$watch(
+			'store.state',
+			function() {
+				if (_debug) console.log('Store has changed!');
+
+				localStorage.setItem('storeState', JSON.stringify(store.state));
+			},
+			{ deep: true }
+		);
+
+		// Categories watcher
+		// this.$watch('store.state.categories', function(oldValue, newValue) {
+		// 	console.log(oldValue.length == newValue.length);
+		// });
+
+		this.$watch('store.state.searchField', function(oldValue, newValue) {
+			if (_debug)
+				console.log(
+					'Rendering stickets which matchs with "' +
+						this.store.state.searchField.toLowerCase() +
+						'"'
+				);
+
+			this.$nextTick(() => {
+				this.refreshMacy();
+			});
+		});
 	},
 	computed: {
-		formHasData: function() {
+		formHasData() {
 			return !!this.form.title || !!this.form.description;
 		},
+
+		sticketsFiltered() {
+			return category => {
+				return this.store.state.searchField.length
+					? category.stickets.filter(s => {
+							return s.title
+								.toLowerCase()
+								.includes(
+									this.store.state.searchField.toLowerCase()
+								);
+					  })
+					: category.stickets;
+			};
+		},
 	},
-});
-
-vm.$watch(
-	'store.state',
-	function() {
-		if (_debug) console.log('Store has changed!');
-
-		localStorage.setItem('storeState', JSON.stringify(store.state));
-	},
-	{ deep: true }
-);
-
-vm.$watch('store.state.categories', function(oldValue, newValue) {
-	console.log(oldValue.lenght == newValue.lenght);
 });
