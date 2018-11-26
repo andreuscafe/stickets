@@ -13,7 +13,7 @@ limitations under the License.
 
 // This polyfill provides Cache.add(), Cache.addAll(), and CacheStorage.match(),
 // which are not implemented in Chrome 40.
-importScripts(window.location.href + 'js/dependencies/cache-polyfill.js');
+importScripts('./js/dependencies/cache-polyfill.js');
 
 // While overkill for this specific sample in which there is only one cache,
 // this is one best practice that can be followed in general to keep track of
@@ -30,12 +30,12 @@ importScripts(window.location.href + 'js/dependencies/cache-polyfill.js');
 // updated service worker is activated.
 
 var urlsToPrefetch = [
-	window.location.href + 'index.html',
-	window.location.href + 'js/',
-	window.location.href + 'js/macy.js',
-	window.location.href + 'js/vue.js',
-	window.location.href + 'js/vuex.js',
-	window.location.href + 'css/styles.css',
+	'./index.html',
+	'./js/',
+	'./js/macy.js',
+	'./js/vue.js',
+	'./js/vuex.js',
+	'./css/styles.css',
 ];
 
 var version = '1.0.5';
