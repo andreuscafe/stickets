@@ -31,7 +31,6 @@ importScripts('/js/dependencies/cache-polyfill.js');
 
 var urlsToPrefetch = [
 	'/index.html',
-	'/favicon.ico',
 	'/js/',
 	'/js/macy.js',
 	'/js/vue.js',
