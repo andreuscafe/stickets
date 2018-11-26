@@ -625,6 +625,7 @@ body {
   white-space: pre-line;
   word-break: break-word;
   line-height: 1.7rem;
+  font-size: 1.1rem;
   color: transparent;
 }
 .m-sticket.m--placeholder .textAreaWrapper .sticketDescription {
