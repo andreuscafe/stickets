@@ -5,7 +5,7 @@ That's at least how I do use it.
 
 ## Setup
 
-This app uses VueJS (vanilla) and SASS. Since VueJS is added to the project via script tag, all you have to do is clone this repo and start the SASS watcher.
+This app uses VueJS and SASS. Since VueJS is added to the project via script tag, all you have to do is clone this repo and start the SASS watcher.
 
 Make sure you have **npm** installed and the SASS package globally installed:
 
