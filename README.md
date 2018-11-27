@@ -1,4 +1,4 @@
-# Stickets
+# Stickets - https://andreuscafe.github.io/stickets/
 Stickets (Super-tickets!) app, a very simple n' cool app to help you keep your ideas ordered.
 
 That's at least how I do use it.
@@ -7,9 +7,12 @@ That's at least how I do use it.
 
 ## Setup
 
-This app uses VueJS (vanilla) and SASS. Since VueJS is added to the project via script tag, all you have to do is clone this repo and start the SASS watcher:
+This app uses VueJS (vanilla) and SASS. Since VueJS is added to the project via script tag, all you have to do is clone this repo and start the SASS watcher.
+
+Make sure you have **npm** installed and the SASS package globally installed:
 
 ```shell
+> npm install -g sass
 > cd stickets/
 > sass scss/styles.scss css/styles.css --watch
 ```
