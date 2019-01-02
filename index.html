@@ -18,7 +18,7 @@
 		>
 			<div class="l-loader" v-show="loading">S</div>
 
-			<header class="l-header">
+			<header class="l-header" role="banner">
 				<div class="contentWrapper">
 					<div class="headerWrapper">
 						<div class="appTitle">Stickets</div>
@@ -144,7 +144,8 @@
 						>
 							<div class="categoryHeader">
 								<h1 class="categoryName">
-									{{ category.name }}
+									<pre class="categoryNameSizer">{{ category.name }}<textarea class="name" v-model="category.name" spellcheck="false"></textarea>
+									</pre>
 									<!--
 										<span class="categoryCount"
 											>({{
@@ -159,7 +160,7 @@
 									-->
 								</h1>
 								<div class="categoryActions">
-									<div class="renameAction action" @click="renameCategory(category.key)">Renombrar</div>
+									<!-- <div class="renameAction action" @click="renameCategory(category.key)">Renombrar</div> -->
 									<div class="renameAction action"
 										@click="clearCategoryStickets(category.key)"
 										v-if="category.stickets.length > 0">
@@ -214,7 +215,7 @@
 									<div
 										class="sticketSubmit"
 										@click="addSticket(category.key)"
-										v-show="formHasData">Agregar</div>
+										v-show="formHasData">＋</div>
 								</div>
 
 								<div
@@ -241,7 +242,7 @@
 				</div>
 			</section>
 
-			<footer class="l-footer">
+			<footer class="l-footer" role="contentinfo">
 				<div class="m-madeWithLove">
 					Hecho con
 					<span class="love">

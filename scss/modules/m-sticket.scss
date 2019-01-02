@@ -178,6 +178,11 @@
 		&:focus-within {
 			opacity: 1;
 			border-color: #5a5a5a;
+
+			.sticketSubmit {
+				background-color: $Palette4;
+				color: $Palette1;
+			}
 		}
 
 		&.m--hasData {
@@ -242,12 +247,20 @@
 
 		.sticketSubmit {
 			position: absolute;
-			top: calc(100% + 15px);
-			right: 0;
+			transform: translateY(-50%);
+			top: 100%;
+			right: 15px;
+			width: 35px;
+			height: 35px;
 			background-color: #fff;
-			padding: 10px;
-			border-radius: 5px;
+			border-radius: 50%;
+
+			display: flex;
+			justify-content: center;
+			align-items: center;
+
 			color: $Palette4;
+			font-size: 1.4rem;
 			cursor: pointer;
 			transition: background-color 0.3s ease-in-out,
 				color 0.3s ease-in-out;

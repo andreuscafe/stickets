@@ -322,7 +322,7 @@ body {
   color: #366f87;
 }
 .m-category.m--horizontal {
-  min-width: 600px;
+  width: 600px;
   border-bottom: 0;
   border-right: 1px solid #e0e0e0;
   padding: 30px 30px 60px;
@@ -330,13 +330,13 @@ body {
 }
 @media (max-width: 480px) {
   .m-category.m--horizontal {
-    min-width: 100vw;
+    width: 100vw;
     padding: 20px 20px 30px;
     scroll-snap-align: center;
   }
 }
 .m-category.m--horizontal.m--placeholder {
-  min-width: 300px;
+  width: 300px;
 }
 .m-category.m--horizontal .sticketsWrapper .m-sticket {
   flex: 1 1 calc(50% - 15px);
@@ -357,6 +357,7 @@ body {
   }
 }
 .m-category .categoryHeader .categoryName {
+  flex: 1 1 auto;
   padding-right: 15px;
   font-size: 1.8rem;
   line-height: 2.4rem;
@@ -366,6 +367,28 @@ body {
   .m-category .categoryHeader .categoryName {
     padding: 0;
   }
+}
+.m-category .categoryHeader .categoryName .categoryNameSizer {
+  position: relative;
+  white-space: pre-wrap;
+  box-sizing: border-box;
+  margin: 0 0 -2.4rem;
+  color: transparent;
+}
+.m-category .categoryHeader .categoryName .categoryNameSizer .name {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  resize: none;
+  outline: none;
+  border: 0;
+  background-color: transparent;
+  overflow: hidden;
+  font: inherit;
+  color: #366f87;
 }
 .m-category .categoryHeader .categoryName .categoryCount {
   font-size: 1.6rem;
@@ -584,6 +607,10 @@ body {
   opacity: 1;
   border-color: #5a5a5a;
 }
+.m-sticket.m--placeholder:focus-within .sticketSubmit {
+  background-color: #366f87;
+  color: #9effcd;
+}
 .m-sticket.m--placeholder.m--hasData {
   opacity: 1;
 }
@@ -641,12 +668,18 @@ body {
 }
 .m-sticket.m--placeholder .sticketSubmit {
   position: absolute;
-  top: calc(100% + 15px);
-  right: 0;
+  transform: translateY(-50%);
+  top: 100%;
+  right: 15px;
+  width: 35px;
+  height: 35px;
   background-color: #fff;
-  padding: 10px;
-  border-radius: 5px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   color: #366f87;
+  font-size: 1.4rem;
   cursor: pointer;
   transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
 }
