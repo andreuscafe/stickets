@@ -10,7 +10,6 @@ This app uses VueJS and SASS. Since VueJS is added to the project via script tag
 Make sure you have **npm** installed:
 
 ```shell
-> npm install -g sass
 > git clone git@github.com:andreuscafe/stickets.git
 > cd stickets/
 > npm install
