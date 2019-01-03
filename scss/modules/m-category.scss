@@ -40,22 +40,22 @@
 	}
 
 	&.m--horizontal {
-		// min-width: 600px;
-		width: 600px;
+		min-width: 600px;
+		// width: 600px;
 		border-bottom: 0;
 		border-right: 1px solid #e0e0e0;
 		padding: 30px 30px 60px;
 		overflow-y: auto;
 
 		@include mobile {
-			// min-width: 100vw;
-			width: 100vw;
+			min-width: 100vw;
+			// width: 100vw;
 			padding: 20px 20px 30px;
 			scroll-snap-align: center;
 		}
 
 		&.m--placeholder {
-			width: 300px;
+			min-width: 300px;
 		}
 
 		.sticketsWrapper {

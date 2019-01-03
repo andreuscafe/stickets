@@ -104,6 +104,7 @@ body {
 .l-header {
   flex: 0 0 auto;
   background-color: #57cdbd;
+  background: linear-gradient(60deg, #57cdbd, #a6e4dc);
 }
 .l-header .headerWrapper {
   display: flex;
@@ -322,7 +323,7 @@ body {
   color: #366f87;
 }
 .m-category.m--horizontal {
-  width: 600px;
+  min-width: 600px;
   border-bottom: 0;
   border-right: 1px solid #e0e0e0;
   padding: 30px 30px 60px;
@@ -330,13 +331,13 @@ body {
 }
 @media (max-width: 480px) {
   .m-category.m--horizontal {
-    width: 100vw;
+    min-width: 100vw;
     padding: 20px 20px 30px;
     scroll-snap-align: center;
   }
 }
 .m-category.m--horizontal.m--placeholder {
-  width: 300px;
+  min-width: 300px;
 }
 .m-category.m--horizontal .sticketsWrapper .m-sticket {
   flex: 1 1 calc(50% - 15px);
