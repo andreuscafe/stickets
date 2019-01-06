@@ -1,5 +1,5 @@
 // Set _debug on true if you want to see the log of all actions
-const _debug = false;
+const _debug = true;
 
 let store = {
 	debug: _debug !== undefined ? _debug : false,
@@ -98,8 +98,10 @@ let store = {
 			console.log('All stickets removed!');
 		}
 
-		for (let i = 0; i < this.state.categories.length; i++) {
-			this.state.categories[i].stickets = [];
+		if (confirm('¿Seguro que deseas eliminar todos los stickets?')) {
+			for (let i = 0; i < this.state.categories.length; i++) {
+				this.state.categories[i].stickets = [];
+			}
 		}
 	},
 	clearCategoryStickets(categoryKey) {
@@ -108,7 +110,10 @@ let store = {
 				'All stickets from category ' + categoryKey + ' removed!'
 			);
 		}
-		this.getCategory(categoryKey).stickets = [];
+
+		if (confirm('¿Seguro que deseas eliminar todos los stickets de esta categoría?')) {
+			this.getCategory(categoryKey).stickets = [];
+		}
 	},
 	clearCategory(categoryKey, callback) {
 		if (this.debug) {
@@ -293,15 +298,17 @@ let vm = new Vue({
 		},
 
 		removeCategory(categoryKey) {
-			this.store.clearCategory(categoryKey, () => {
-				if (this.store.state.masonryLayout) {
-					this.macyInstances.splice(
-						this.macyInstances.findIndex(instance => {
-							return instance.key == categoryKey;
-						})
-					);
-				}
-			});
+			if (confirm('¿Seguro que deseas eliminar esta categoría?')) {
+				this.store.clearCategory(categoryKey, () => {
+					if (this.store.state.masonryLayout) {
+						this.macyInstances.splice(
+							this.macyInstances.findIndex(instance => {
+								return instance.key == categoryKey;
+							})
+						);
+					}
+				});
+			}
 		},
 
 		addCategory() {
@@ -331,7 +338,7 @@ let vm = new Vue({
 					waitForImages: false,
 					columns: 2,
 					margin: {
-						x: 15,
+						x: 25,
 						y: 25,
 					},
 					breakAt: {
@@ -427,6 +434,11 @@ let vm = new Vue({
 				return this.store.state.searchField.length
 					? category.stickets.filter(s => {
 							return s.title
+								.toLowerCase()
+								.includes(
+									this.store.state.searchField.toLowerCase()
+								) || 
+								s.description
 								.toLowerCase()
 								.includes(
 									this.store.state.searchField.toLowerCase()

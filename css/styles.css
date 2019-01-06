@@ -106,6 +106,13 @@ body {
   background-color: #57cdbd;
   background: linear-gradient(60deg, #57cdbd, #a6e4dc);
 }
+.l-header:not(.m--horizontal) {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 100;
+}
 .l-header .headerWrapper {
   display: flex;
   align-items: center;
@@ -190,13 +197,23 @@ body {
   flex: 1 1 auto;
   background-color: #f0f0f0;
   position: relative;
+  padding-top: 64px;
 }
 .l-categories.m--horizontal {
+  padding-top: 0;
   flex: 1 1 auto;
   display: flex;
 }
 .l-categories.m--horizontal .categoriesWrapper {
   flex-direction: row;
+}
+.l-categories:not(.m--horizontal) .categoriesWrapper {
+  overflow: visible;
+}
+@media (max-width: 480px) {
+  .l-categories:not(.m--horizontal) .contentWrapper {
+    padding: 0;
+  }
 }
 .l-categories .categoriesWrapper {
   display: flex;
@@ -296,7 +313,7 @@ body {
 @media (max-width: 480px) {
   .m-category {
     min-width: 100%;
-    padding: 20px 0 30px;
+    padding: 0 0 30px;
   }
 }
 .m-category:last-child {
@@ -326,18 +343,26 @@ body {
   min-width: 600px;
   border-bottom: 0;
   border-right: 1px solid #e0e0e0;
-  padding: 30px 30px 60px;
+  padding: 0 0 60px;
   overflow-y: auto;
 }
 @media (max-width: 480px) {
   .m-category.m--horizontal {
     min-width: 100vw;
-    padding: 20px 20px 30px;
     scroll-snap-align: center;
   }
 }
 .m-category.m--horizontal.m--placeholder {
   min-width: 300px;
+}
+.m-category.m--horizontal .categoryHeader {
+  padding: 15px;
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
+}
+.m-category.m--horizontal .sticketsWrapper {
+  width: calc(100% - 30px);
 }
 .m-category.m--horizontal .sticketsWrapper .m-sticket {
   flex: 1 1 calc(50% - 15px);
@@ -346,15 +371,25 @@ body {
   display: block;
   margin: 0;
 }
+.m-category.m--masonry.m--horizontal .sticketsWrapper {
+  margin: 0 auto;
+}
 .m-category .categoryHeader {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
+  position: sticky;
+  top: 64px;
+  z-index: 90;
   margin-bottom: 30px;
+  padding: 10px 0;
+  background-color: #f0f0f0;
+  border-bottom: 1px solid #e0e0e0;
 }
 @media (max-width: 480px) {
   .m-category .categoryHeader {
     flex-direction: column;
+    padding: 15px;
   }
 }
 .m-category .categoryHeader .categoryName {
@@ -440,8 +475,19 @@ body {
   position: relative;
   margin: 0 -7.5px;
 }
+@media (max-width: 480px) {
+  .m-category .sticketsWrapper {
+    max-width: calc(100% - 30px);
+    margin: 0 auto;
+  }
+}
 .m-category .sticketsWrapper.m--masonry {
   margin: 0;
+}
+@media (max-width: 480px) {
+  .m-category .sticketsWrapper.m--masonry {
+    margin: 0 auto;
+  }
 }
 .m-category .sticketsWrapper .noResults {
   width: 100% !important;
@@ -626,15 +672,26 @@ body {
   background-color: transparent;
   outline: 0;
   transition: background-color 0.3s ease-in-out;
+  color: #666;
 }
-.m-sticket.m--placeholder .sticketTitle:hover,
-.m-sticket.m--placeholder .sticketDescription:hover {
-  background-color: #fbfbfb;
+.m-sticket.m--placeholder .sticketTitle::placeholder,
+.m-sticket.m--placeholder .sticketDescription::placeholder {
+  transition: color 0.3s ease-in-out;
+  color: #aaa;
+}
+.m-sticket.m--placeholder .sticketTitle:hover::placeholder,
+.m-sticket.m--placeholder .sticketDescription:hover::placeholder {
+  color: #999;
 }
 .m-sticket.m--placeholder .sticketTitle:active, .m-sticket.m--placeholder .sticketTitle:focus,
 .m-sticket.m--placeholder .sticketDescription:active,
 .m-sticket.m--placeholder .sticketDescription:focus {
   background-color: #fff;
+}
+.m-sticket.m--placeholder .sticketTitle:active::placeholder, .m-sticket.m--placeholder .sticketTitle:focus::placeholder,
+.m-sticket.m--placeholder .sticketDescription:active::placeholder,
+.m-sticket.m--placeholder .sticketDescription:focus::placeholder {
+  color: #999;
 }
 .m-sticket.m--placeholder .sticketTitle {
   flex: 0 0 auto;
@@ -643,6 +700,7 @@ body {
   margin-bottom: 0;
   border-radius: 5px;
   font-family: Avenir Next, Avenir, Tahoma, sans-serif;
+  font-weight: 600;
 }
 .m-sticket.m--placeholder .textAreaWrapper {
   min-height: 70px;

@@ -200,14 +200,26 @@
 			background-color: transparent;
 			outline: 0;
 			transition: background-color 0.3s ease-in-out;
+			color: #666;
+
+			&::placeholder {
+				transition: color 0.3s ease-in-out;
+				color: #aaa;
+			}
 
 			&:hover {
-				background-color: #fbfbfb;
+				&::placeholder {
+					color: #999;
+				}
 			}
 
 			&:active,
 			&:focus {
 				background-color: #fff;
+
+				&::placeholder {
+					color: #999;
+				}
 			}
 		}
 
@@ -218,6 +230,7 @@
 			margin-bottom: 0;
 			border-radius: 5px;
 			font-family: $primaryFont;
+			font-weight: 600;
 		}
 
 		.textAreaWrapper {

@@ -18,7 +18,11 @@
 		>
 			<div class="l-loader" v-show="loading">S</div>
 
-			<header class="l-header" role="banner">
+			<header
+				class="l-header"
+				role="banner"
+				:class="{'m--horizontal': store.state.horizontalLayout}"
+			>
 				<div class="contentWrapper">
 					<div class="headerWrapper">
 						<div class="appTitle">Stickets</div>
@@ -28,6 +32,7 @@
 								type="text"
 								class="searchInput"
 								placeholder="Buscar..."
+								spellcheck="false"
 								v-model="store.state.searchField"
 							/>
 						</div>
@@ -38,61 +43,6 @@
 								@click="toggleOrientation"
 							>
 								💅
-							</div>
-
-							<div class="m-add">
-								<div
-									class="addButton"
-									v-on:click="isAdding = !isAdding; withShadow = !withShadow"
-								>
-									+
-								</div>
-								<div
-									class="l-shadow"
-									v-show="withShadow"
-									v-on:click="isAdding = !isAdding; withShadow = !withShadow"
-								></div>
-								<div class="addForm" v-show="isAdding">
-									<div class="m-form">
-										<h2 class="formTitle">Crear sticket</h2>
-										<label class="formInputWrapper">
-											Título:
-											<input
-												type="text"
-												class="formInput"
-												v-model="form.title"
-											/>
-										</label>
-										<label class="formInputWrapper">
-											Descripción:
-											<input
-												type="text"
-												class="formInput"
-												v-model="form.description"
-											/>
-										</label>
-										<label class="formInputWrapper">
-											Categoría:
-											<select
-												v-model="form.categoryKey"
-												class="formInput"
-											>
-												<option
-													v-for="category in store.state.categories"
-													:value="category.key"
-												>
-													{{ category.name }}
-												</option>
-											</select>
-										</label>
-										<button
-											class="addSticketButton"
-											@click="addSticket"
-										>
-											Agregar Sticket
-										</button>
-									</div>
-								</div>
 							</div>
 						</div>
 					</div>

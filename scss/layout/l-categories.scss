@@ -2,13 +2,27 @@
 	flex: 1 1 auto;
 	background-color: #f0f0f0;
 	position: relative;
+	padding-top: 64px;
 
 	&.m--horizontal {
+		padding-top: 0;
 		flex: 1 1 auto;
 		display: flex;
 
 		.categoriesWrapper {
 			flex-direction: row;
+		}
+	}
+
+	&:not(.m--horizontal) {
+		.categoriesWrapper {
+			overflow: visible;
+		}
+
+		.contentWrapper {
+			@include mobile {
+				padding: 0;
+			}
 		}
 	}
 

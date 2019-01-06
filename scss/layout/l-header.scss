@@ -1,9 +1,15 @@
 .l-header {
 	flex: 0 0 auto;
-
 	background-color: $secondaryColor;
-
 	background: linear-gradient(60deg, $secondaryColor, lighten($secondaryColor, 20%));
+	
+	&:not(.m--horizontal) {
+		position: fixed;
+		top: 0;
+		left: 0;
+		width: 100%;
+		z-index: 100;
+	}
 
 	.headerWrapper {
 		display: flex;
