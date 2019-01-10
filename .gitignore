@@ -1,4 +1,9 @@
 .DS_Store
 ./*.DS_Store
 .vscode/
+
+.firebase/
+.firebaserc
+firebase.json
+
 node_modules/
