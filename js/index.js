@@ -1,5 +1,5 @@
 // Set _debug on true if you want to see the log of all actions
-const _debug = true;
+const _debug = false;
 
 let store = {
 	debug: _debug !== undefined ? _debug : false,
