@@ -1,151 +1,3 @@
-// Set _debug on true if you want to see the log of all actions
-const _debug = false;
-
-let store = {
-	debug: _debug !== undefined ? _debug : false,
-	state: localStorage.getItem('storeState')
-		? JSON.parse(localStorage.getItem('storeState'))
-		: {
-				horizontalLayout: true,
-				masonryLayout: true,
-				searchField: '',
-				stickets: [],
-				categories: [],
-		  },
-	toggleOrientation(callback) {
-		if (this.debug) console.log('Changed orientation');
-		this.state.horizontalLayout = !this.state.horizontalLayout;
-
-		if (callback) callback();
-	},
-	toggleMasonry() {
-		if (this.debug) console.log('Toggled masonry layout');
-		this.state.masonryLayout = !this.state.masonryLayout;
-	},
-	addSticket(title, description, categoryKey) {
-		if (this.debug)
-			console.log(
-				'addSticket triggered with title "' +
-					title +
-					'" and description "' +
-					description +
-					'" on category ' +
-					categoryKey
-			);
-
-		for (let i = 0; i < this.state.categories.length; i++) {
-			if (this.state.categories[i].key === categoryKey) {
-				this.state.categories[i].stickets.push({
-					key: new Date().getTime(),
-					title: title,
-					description: description,
-				});
-
-				break;
-			}
-		}
-	},
-
-	deleteSticket(sticketKey, categoryKey) {
-		let category = this.getCategory(categoryKey);
-		category.stickets.splice(
-			category.stickets.findIndex(sticket => {
-				return sticket.key == sticketKey;
-			}),
-			1
-		);
-	},
-
-	addCategory(name, callback) {
-		if (this.debug) console.log('addCategory triggered with name: ' + name);
-
-		if (name) {
-			let newCategory = {
-				key: new Date().getTime(),
-				name: name,
-				stickets: [],
-			};
-
-			this.state.categories.push(newCategory);
-
-			if (callback) callback(this.getCategory(newCategory.key));
-		}
-	},
-	moveSticket(sticketKey, fromKey, toKey) {
-		if (this.debug) {
-			console.log(
-				'Dragged sticket ' +
-					sticketKey +
-					' from category ' +
-					fromKey +
-					' to category ' +
-					toKey
-			);
-		}
-
-		let fromCat = this.getCategory(fromKey);
-
-		for (let i = 0; i < fromCat.stickets.length; i++) {
-			if (fromCat.stickets[i].key == sticketKey) {
-				var sticket = fromCat.stickets.splice(i, 1);
-
-				this.getCategory(toKey).stickets.push(sticket[0]);
-			}
-		}
-	},
-	clearAllStickets() {
-		if (this.debug) {
-			console.log('All stickets removed!');
-		}
-
-		if (confirm('¿Seguro que deseas eliminar todos los stickets?')) {
-			for (let i = 0; i < this.state.categories.length; i++) {
-				this.state.categories[i].stickets = [];
-			}
-		}
-	},
-	clearCategoryStickets(categoryKey) {
-		if (this.debug) {
-			console.log(
-				'All stickets from category ' + categoryKey + ' removed!'
-			);
-		}
-
-		if (confirm('¿Seguro que deseas eliminar todos los stickets de esta categoría?')) {
-			this.getCategory(categoryKey).stickets = [];
-		}
-	},
-	clearCategory(categoryKey, callback) {
-		if (this.debug) {
-			console.log('Category ' + categoryKey + ' removed!');
-		}
-
-		store.state.categories.splice(
-			store.state.categories.findIndex(
-				category => category.key == categoryKey
-			),
-			1
-		);
-
-		if (callback) callback();
-	},
-	renameCategory(categoryKey, newName) {
-		if (newName) {
-			this.getCategory(categoryKey).name = newName;
-		}
-	},
-	getCategory(categoryKey) {
-		return store.state.categories.filter(cat => {
-			return cat.key == categoryKey;
-		})[0];
-	},
-	getSticket(sticketKey, categoryKey) {
-		return this.getCategory(categoryKey).stickets.filter(sticket => {
-			return sticket.key == sticketKey;
-		})[0];
-	},
-};
-
 let vm = new Vue({
 	el: '#app',
 	data: {
@@ -170,6 +22,7 @@ let vm = new Vue({
 				}
 			});
 		},
+
 		refreshMacy(categoryKey) {
 			if (this.store.state.masonryLayout && this.macyInstances) {
 				if (categoryKey) {
@@ -197,6 +50,7 @@ let vm = new Vue({
 				}
 			}
 		},
+
 		addSticket(categoryKey) {
 			if (
 				(this.form.title || this.form.description) &&
@@ -375,41 +229,102 @@ let vm = new Vue({
 				),
 			});
 		},
+
+		addByFocusout(categoryKey) {
+			if (this.formHasData) {
+				this.addSticket(categoryKey)
+			}
+		},
+
+		uploadToFirebase() {
+			// Add a second document with a generated ID.
+			this.db.collection("boards").add({
+				id: this.boardKey ? this.boardKey : Math.random().toString(36).substring(2, 7),
+				categories: this.store.state.categories
+			})
+			.then(function(docRef) {
+			    console.log("Board written with ID: ", docRef.id);
+			})
+			.catch(function(error) {
+			    console.error("Error adding document: ", error);
+			});
+		},
+
+		getFromFirebase(boardKey) {
+			this.db.collection("boards").where("id", "==", boardKey)
+			.get()
+			.then((querySnapshot) => {
+				querySnapshot.forEach((doc) => {
+					// doc.data() is never undefined for query doc snapshots
+					console.log(doc.id, " => ", doc.data());
+
+					this.store.state.categories = doc.data().categories;
+				});
+			})
+			.catch(function(error) {
+				console.log("Error getting documents: ", error);
+			});
+		}
+	},
+	beforeMount: function () {
+		if (window.location.hash) {
+			const url = window.location.hash;
+			const boardKey = url.slice(url.indexOf('/')+1, url.length);
+			
+			if (_debug) console.log("Trying to retrieve data from "+boardKey+" board on Firebase");
+
+			// Initialize Cloud Firestore through Firebase
+			this.db = firebase.firestore();
+			if (_debug) console.log('Created Firebase Firestore instance!');
+
+			this.getFromFirebase(boardKey)
+		}
+
+		// db.collection("users").add({
+		//     first: "Ada",
+		//     last: "Lovelace",
+		//     born: 1815
+		// })
+		// .then(function(docRef) {
+		//     console.log("Document written with ID: ", docRef.id);
+		// })
+		// .catch(function(error) {
+		//     console.error("Error adding document: ", error);
+		// });
 	},
 	mounted: function() {
 		this.$nextTick(function() {
-			// Code that will run only after the
-			// entire view has been rendered
+			// Code that will run only after the entire view has been rendered
 
-			if (this.loading && this.store.state.masonryLayout) {
-				this.store.state.categories.forEach(cat => {
-					this.initializeMacy(cat);
-				});
-			}
+			// Initialize masonry on each category
+			// if (this.loading && this.store.state.masonryLayout) {
+			// 	this.store.state.categories.forEach(cat => {
+			// 		this.initializeMacy(cat);
+			// 	});
+			// }
 
+			// Hides the loading splash
 			this.loading = false;
 		});
 
-		if (this.store.state.masonryLayout && window.innerWidth > 480) {
-			this.store.state.categories.forEach(category => {
-				this.addCategoryWatcher(category);
-			});
-		}
+		// if (this.store.state.masonryLayout && window.innerWidth > 480) {
+		// 	this.store.state.categories.forEach(category => {
+		// 		this.addCategoryWatcher(category);
+		// 	});
+		// }
+
+
+		// Add some watchers
 
 		this.$watch(
 			'store.state',
 			function() {
 				if (_debug) console.log('Store has changed!');
 
-				localStorage.setItem('storeState', JSON.stringify(store.state));
+				// localStorage.setItem('storeState', JSON.stringify(store.state));
 			},
 			{ deep: true }
 		);
-
-		// Categories watcher
-		// this.$watch('store.state.categories', function(oldValue, newValue) {
-		// 	console.log(oldValue.length == newValue.length);
-		// });
 
 		this.$watch('store.state.searchField', function(oldValue, newValue) {
 			if (_debug)
@@ -433,16 +348,16 @@ let vm = new Vue({
 			return category => {
 				return this.store.state.searchField.length
 					? category.stickets.filter(s => {
-							return s.title
-								.toLowerCase()
-								.includes(
-									this.store.state.searchField.toLowerCase()
-								) || 
-								s.description
-								.toLowerCase()
-								.includes(
-									this.store.state.searchField.toLowerCase()
-								);
+						return s.title
+							.toLowerCase()
+							.includes(
+								this.store.state.searchField.toLowerCase()
+							) ||
+							s.description
+							.toLowerCase()
+							.includes(
+								this.store.state.searchField.toLowerCase()
+							);
 					  })
 					: category.stickets;
 			};

@@ -37,14 +37,15 @@
 				justify-content: center;
 				align-items: center;
 
-				width: 35px;
+				width: auto;
 				height: 35px;
 				border-radius: 5px;
 				margin-right: 15px;
+				padding: 0 10px;
 
-				font-size: 1.4rem;
+				font-size: 1rem;
 				color: #fff;
-				font-weight: 900;
+				font-weight: 700;
 				cursor: pointer;
 
 				background-color: darken($secondaryColor, 15%);
@@ -53,9 +54,10 @@
 					margin: 0;
 				}
 
-				&.m--actionToggleLayout {
-					width: auto;
-					padding: 0 10px;
+				&.m--squared {
+					width: 35px;
+					height: 35px;
+					padding: 0px;
 				}
 			}
 		}

@@ -8,6 +8,11 @@
 
 		<link rel="icon" href="favicon.ico" type="image/png">
 		<link rel="stylesheet" href="css/styles.css" />
+
+		<script src="https://www.gstatic.com/firebasejs/5.7.3/firebase-app.js"></script>
+		<script src="https://www.gstatic.com/firebasejs/5.5.2/firebase-firestore.js"></script>
+
+		<script type="text/javascript" src="js/firebase.js"></script>
 	</head>
 
 	<body>
@@ -38,12 +43,8 @@
 						</div>
 
 						<div class="actionsWrapper">
-							<div
-								class="action m--actionToggleLayout"
-								@click="toggleOrientation"
-							>
-								💅
-							</div>
+							<div class="action" @click="toggleOrientation">💅</div>
+							<div class="action" @click="uploadToFirebase">Subir</div>
 						</div>
 					</div>
 				</div>
@@ -153,6 +154,7 @@
 										class="sticketTitle"
 										placeholder="Agregar sticket"
 										v-model="form.title"
+										@focusout="addByFocusout(category.key)"
 										spellcheck="false"
 									/>
 									<div class="textAreaWrapper">{{ form.description }}
@@ -160,6 +162,7 @@
 										class="sticketDescription"
 										placeholder="Escribí algo útil..."
 										v-model="form.description"
+										@focusout="addByFocusout(category.key)"
 										spellcheck="false"></textarea>
 									</div>
 									<div
@@ -220,6 +223,7 @@ c6.1-9.3,16-12.1,16-21.2C32,3.8,28.2,0,23.6,0z"
 		<script src="js/macy.js"></script>
 		<!-- <script src="js/vuex.js"></script> -->
 
+		<script src="js/store/store.js"></script>
 		<script src="js/index.js"></script>
 
 		<script>
