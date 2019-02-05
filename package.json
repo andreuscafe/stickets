@@ -6,7 +6,7 @@
   "scripts": {
     "server": "http-server",
     "sass": "sass scss/styles.scss css/styles.css --watch",
-    "start": "npm-run-all --parallel server sass"
+    "dev": "npm-run-all --parallel server sass"
   },
   "repository": {
     "type": "git",
