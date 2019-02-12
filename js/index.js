@@ -56,21 +56,21 @@ let store = {
 		);
 	},
 
-	addCategory(name, callback) {
-		if (this.debug) console.log('addCategory triggered with name: ' + name);
+	addCategory(placeholder, callback) {
+		if (this.debug) console.log('addCategory triggered with placeholder: ' + name);
 
-		if (name) {
-			let newCategory = {
-				key: new Date().getTime(),
-				name: name,
-				stickets: [],
-			};
+		let newCategory = {
+			key: new Date().getTime(),
+			name: '',
+			placeholder: placeholder,
+			stickets: [],
+		};
 
-			this.state.categories.push(newCategory);
+		this.state.categories.push(newCategory);
 
-			if (callback) callback(this.getCategory(newCategory.key));
-		}
+		if (callback) callback(this.getCategory(newCategory.key));
 	},
+
 	moveSticket(sticketKey, fromKey, toKey) {
 		if (this.debug) {
 			console.log(
@@ -115,19 +115,25 @@ let store = {
 			this.getCategory(categoryKey).stickets = [];
 		}
 	},
-	clearCategory(categoryKey, callback) {
-		if (this.debug) {
-			console.log('Category ' + categoryKey + ' removed!');
+	removeCategory(categoryKey, callback) {
+		let actuallyRemove = () => {
+			store.state.categories.splice(
+				store.state.categories.findIndex(
+					category => category.key == categoryKey
+					), 1
+				);
+
+			if (this.debug) console.log('Category ' + categoryKey + ' removed!');
+			if (callback) callback();
 		}
 
-		store.state.categories.splice(
-			store.state.categories.findIndex(
-				category => category.key == categoryKey
-			),
-			1
-		);
+		if (this.getCategory(categoryKey).stickets.length) {
+			if (confirm('¿Seguro que deseas eliminar esta categoría?')) actuallyRemove();
+		} else {
+			actuallyRemove()
+		}
 
-		if (callback) callback();
+
 	},
 	renameCategory(categoryKey, newName) {
 		if (newName) {
@@ -267,11 +273,8 @@ let vm = new Vue({
 		dropSticket(e) {
 			dropped = e;
 			let sticketData = JSON.parse(e.dataTransfer.getData('keys'));
-			let newCategoryKey = e.target.closest('.m-category').attributes[
-				'data-key'
-			].value;
-			e.target.closest('.m-category').style.backgroundColor =
-				'transparent';
+			let newCategoryKey = e.target.closest('.m-category').attributes['data-key'].value;
+			e.target.closest('.m-category').style.backgroundColor = 'transparent';
 
 			let childNodes = e.target
 				.closest('.m-category')
@@ -281,11 +284,13 @@ let vm = new Vue({
 				childNodes[i].style.pointerEvents = 'initial';
 			}
 
-			this.store.moveSticket(
-				sticketData.sticketKey,
-				sticketData.categoryKey,
-				newCategoryKey
-			);
+			if(!(newCategoryKey == sticketData.categoryKey)){
+				this.store.moveSticket(
+					sticketData.sticketKey,
+					sticketData.categoryKey,
+					newCategoryKey
+				);
+			}
 		},
 
 		renameCategory(categoryKey) {
@@ -298,30 +303,45 @@ let vm = new Vue({
 		},
 
 		removeCategory(categoryKey) {
-			if (confirm('¿Seguro que deseas eliminar esta categoría?')) {
-				this.store.clearCategory(categoryKey, () => {
-					if (this.store.state.masonryLayout) {
-						this.macyInstances.splice(
-							this.macyInstances.findIndex(instance => {
-								return instance.key == categoryKey;
-							})
-						);
-					}
-				});
-			}
+			this.store.removeCategory(categoryKey, () => {
+				if (this.store.state.masonryLayout) {
+					this.macyInstances.splice(
+						this.macyInstances.findIndex(instance => {
+							return instance.key == categoryKey;
+						})
+					);
+				}
+			});
 		},
 
 		addCategory() {
+			let placeholders = [
+				'Acá los stickets raros...',
+				'Notas mentales...',
+				'Necesito comprar...',
+				'Por hacer...',
+				'En progreso...',
+				'Terminado...',
+				'Ver luego...',
+				'Notas de la reunión...',
+				'Links interesantes...',
+				'Películas a ver...',
+				'Detalles oportunos...',
+				'Recordar...',
+				'/watch?v=dQw4w9WgXcQ'
+			];
 			this.store.addCategory(
-				prompt('Dale un nombre a la nueva categoría'),
+				placeholders[Math.floor(Math.random() * placeholders.length)],
 				ref => {
 					this.addCategoryWatcher(ref);
 
 					if (this.store.state.masonryLayout) {
 						this.$nextTick().then(() => {
 							this.initializeMacy(ref);
+							document.querySelector('div[data-key="'+ref.key+'"]').querySelector("textarea.name").focus();
 						});
 					}
+
 				}
 			);
 		},
@@ -375,8 +395,23 @@ let vm = new Vue({
 				),
 			});
 		},
+
+		focusPlaceholder(categoryKey) {
+			console.log(categoryKey);
+			document.querySelector('div[data-key="'+categoryKey+'"]').querySelector(".js-sticketPlaceholder>input").focus();
+		}
 	},
 	mounted: function() {
+		document.addEventListener('keydown', e => {
+			if (e.keyCode == 65 && (e.shiftKey)){
+				e.preventDefault(); e.stopPropagation();
+				this.addCategory();
+			} else if (e.keyCode == 70 && (e.metaKey || e.ctrlKey)) {
+				e.preventDefault(); e.stopPropagation();
+				document.querySelector('.js-search').focus();
+			}
+ 		});
+
 		this.$nextTick(function() {
 			// Code that will run only after the
 			// entire view has been rendered

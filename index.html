@@ -17,6 +17,8 @@
 			id="app"
 			class="appWrapper"
 			:class="{'m--horizontal': store.state.horizontalLayout}"
+			v-on:keydown.ctrl.78.prevent="addCategory"
+			v-on:keydown.meta.78.prevent="addCategory"
 		>
 			<div class="l-loader" v-show="loading">S</div>
 
@@ -32,7 +34,7 @@
 						<div class="m-search m--onHeader">
 							<input
 								type="text"
-								class="searchInput"
+								class="searchInput js-search"
 								placeholder="Buscar..."
 								spellcheck="false"
 								v-model="store.state.searchField"
@@ -62,15 +64,17 @@
 					<div class="contentWrapper">
 						<div class="overlapContent">
 							<div class="emoji">😅</div>
-							<h3 class="overlapTitle">No hay categorías!</h3>
+							<h3 class="overlapTitle">No tenés categorías.</h3>
 							<div class="overlapDescription">
-								Sin categorías no haces nada en esta app,
-								básicamente.
+								Pero es muy fácil cambiar eso.
 								<br />
-								Vas a necesitar algunas.
+								Presioná el botón verde de abajo.
+								<br>
+								<br>
+								O mejor; presioná <b>shift+A.</b>
 							</div>
 							<div class="overlapAction" @click="addCategory">
-								Bueno, a ver...
+								¿shift+A? ¿Quién usaría esa combinación?
 							</div>
 						</div>
 					</div>
@@ -83,42 +87,34 @@
 					<div class="categoriesWrapper">
 						<div
 							class="m-category"
+							v-for="category in store.state.categories"
 							:class="{
-						'js-masonry m--masonry': store.state.masonryLayout,
-						'm--horizontal': store.state.horizontalLayout
-					}"
+								'js-masonry m--masonry': store.state.masonryLayout,
+								'm--horizontal': store.state.horizontalLayout
+							}"
+							@click.prevent="focusPlaceholder(category.key)"
 							@drop.prevent="dropSticket"
 							@dragover.prevent="allowDrop"
 							@dragenter.prevent.stop="dragEnter"
 							@dragleave.prevent.stop="dragLeave"
-							v-for="category in store.state.categories"
+							v-on:keydown.ctrl.shift.delete.prevent.stop="removeCategory(category.key)"
+							v-on:keydown.meta.shift.delete.prevent.stop="removeCategory(category.key)"
 							:data-key="category.key"
 						>
 							<div class="categoryHeader">
 								<h1 class="categoryName">
-									<pre class="categoryNameSizer">{{ category.name }}<textarea class="name" v-model="category.name" spellcheck="false"></textarea>
+									<pre class="categoryNameSizer">{{ category.name }}<textarea class="name" v-model="category.name" spellcheck="false" v-bind:placeholder="category.placeholder" @click.prevent.stop></textarea>
 									</pre>
-									<!--
-										<span class="categoryCount"
-											>({{
-												category.filteredStickets.length
-													? category.filteredStickets
-															.length +
-													  '/' +
-													  category.stickets.length
-													: category.stickets.length
-											}})</span
-										>
-									-->
 								</h1>
 								<div class="categoryActions">
-									<!-- <div class="renameAction action" @click="renameCategory(category.key)">Renombrar</div> -->
-									<div class="renameAction action"
-										@click="clearCategoryStickets(category.key)"
+									<!-- <div class="textAction action" @click="renameCategory(category.key)">Renombrar</div> -->
+									<span class="textAction action">({{category.stickets.length}})</span>
+									<div class="iconAction action"
+										@click.stop="clearCategoryStickets(category.key)"
 										v-if="category.stickets.length > 0">
-										Vaciar
+										↻
 									</div>
-									<div class="removeAction action" @click="removeCategory(category.key)">✕</div>
+									<div class="iconAction action" @click.stop="removeCategory(category.key)">✕</div>
 								</div>
 							</div>
 							<div class="sticketsWrapper"
@@ -127,7 +123,8 @@
 								<div
 									class="m-sticket"
 									draggable="true"
-									v-on:dragstart="dragSticket"
+									@click.prevent.stop
+									v-on:dragstart.stop="dragSticket"
 									v-for="(sticket, index) in sticketsFiltered(category)"
 									:data-key="sticket.key"
 									:class="{'m--masonry': store.state.masonryLayout}"
@@ -136,18 +133,30 @@
 										<div class="action m--actionDelete" @click="deleteSticket(sticket.key, category.key)">✕</div>
 									</div>
 									<div class="titleWrapper">
-										<pre class="titleSizer">{{ sticket.title }}<textarea class="sticketTitle" v-model="sticket.title" spellcheck="false"></textarea>
+										<pre class="titleSizer">{{ sticket.title }}<textarea
+											class="sticketTitle"
+											v-model="sticket.title"
+											spellcheck="false"
+											v-on:keydown.ctrl.delete.exact.stop="deleteSticket(sticket.key, category.key)"
+											v-on:keydown.meta.delete.exact.stop="deleteSticket(sticket.key, category.key)">
+											</textarea>
 										</pre>
 									</div>
 									<div class="descriptionWrapper">
-										<pre class="descriptionSizer">{{ sticket.description }}<textarea class="sticketDescription" v-model="sticket.description" spellcheck="false"></textarea>
+										<pre class="descriptionSizer">{{ sticket.description }}<textarea
+											class="sticketDescription"
+											v-model="sticket.description"
+											spellcheck="false"
+											v-on:keydown.ctrl.delete.exact.stop="deleteSticket(sticket.key, category.key)"
+											v-on:keydown.meta.delete.exact.stop="deleteSticket(sticket.key, category.key)">
+											</textarea>
 										</pre>
 									</div>
 								</div>
 
 								<!-- Placeholder for add new stickets -->
 								<div
-									class="m-sticket m--placeholder"
+									class="m-sticket m--placeholder js-sticketPlaceholder"
 									:class="{ 's--hasData': formHasData, 'm--masonry': store.state.masonryLayout}"
 									v-if="!store.state.searchField"
 								>
@@ -156,18 +165,25 @@
 										placeholder="Agregar sticket"
 										v-model="form.title"
 										spellcheck="false"
+										v-on:keydown.meta.13="addSticket(category.key)"
+										v-on:keydown.ctrl.13="addSticket(category.key)"
+										@click.prevent.stop
 									/>
 									<div class="textAreaWrapper">{{ form.description }}
 										<textarea
 										class="sticketDescription"
 										placeholder="Escribí algo útil..."
 										v-model="form.description"
-										spellcheck="false"></textarea>
+										spellcheck="false"
+										v-on:keydown.meta.13="addSticket(category.key)"
+										v-on:keydown.ctrl.13="addSticket(category.key)"
+										@click.prevent.stop></textarea>
 									</div>
 									<div
 										class="sticketSubmit"
 										@click="addSticket(category.key)"
-										v-show="formHasData">＋</div>
+										v-show="formHasData"
+										@click.prevent.stop>＋</div>
 								</div>
 
 								<div
@@ -183,10 +199,11 @@
 
 						<div
 							class="m-category m--placeholder"
-							@click="addCategory"
-							:class="{
-							'm--horizontal': store.state.horizontalLayout
-						}"
+							@click.stop="addCategory"
+							:class="{'m--horizontal': store.state.horizontalLayout}"
+							tabindex="0"
+							@keydown.enter="addCategory"
+							@keydown.space="addCategory"
 						>
 							<div class="addText">Agregar una categoría</div>
 						</div>

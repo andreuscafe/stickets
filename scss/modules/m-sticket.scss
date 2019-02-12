@@ -26,6 +26,7 @@
 
 		.sticketActions {
 			opacity: 1;
+			transform: translateY(-50%) scale(1);
 		}
 	}
 
@@ -124,8 +125,8 @@
 		position: absolute;
 		top: 0;
 		right: 15px;
-		transform: translateY(-50%);
-		transition: opacity 0.3s ease-in-out;
+		transform: translateY(-50%) scale(0.8);
+		transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
 		z-index: 10;
 
 		@include tablet {

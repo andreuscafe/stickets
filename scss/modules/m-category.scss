@@ -32,7 +32,9 @@
 				color 0.3s ease-in-out, padding 0.3s ease-in-out;
 		}
 
-		&:hover {
+		&:hover, &:focus {
+			outline: none;
+
 			.addText {
 				background-color: $Palette1;
 				color: $Palette4;
@@ -140,6 +142,10 @@
 
 					font: inherit;
 					color: $Palette4;
+
+					&::placeholder {
+						color: #bbb;
+					}
 				}
 			}
 
@@ -167,34 +173,35 @@
 				&:last-child {
 					margin: 0;
 				}
-			}
+				
+				&.textAction {
+					font-weight: 300;
+					cursor: pointer;
 
-			.renameAction {
-				font-weight: 300;
-				cursor: pointer;
+					&:hover {
+						text-decoration: underline;
+					}
+				}
 
-				&:hover {
-					text-decoration: underline;
+				&.iconAction {
+					display: flex;
+					justify-content: center;
+					align-items: center;
+					cursor: pointer;
+
+					width: 30px;
+					height: 30px;
+					border-radius: 50%;
+					transition: background-color 0.3s ease-in-out,
+						color 0.3s ease-in-out;
+
+					&:hover {
+						background-color: #555;
+						color: #fff;
+					}
 				}
 			}
 
-			.removeAction {
-				display: flex;
-				justify-content: center;
-				align-items: center;
-				cursor: pointer;
-
-				width: 30px;
-				height: 30px;
-				border-radius: 50%;
-				transition: background-color 0.3s ease-in-out,
-					color 0.3s ease-in-out;
-
-				&:hover {
-					background-color: #555;
-					color: #fff;
-				}
-			}
 		}
 	}
 
@@ -226,7 +233,7 @@
 		}
 	}
 
-	&:hover {
+	&:hover, &:focus-within {
 		.categoryHeader .categoryActions {
 			opacity: 1;
 		}
