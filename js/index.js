@@ -397,7 +397,6 @@ let vm = new Vue({
 		},
 
 		focusPlaceholder(categoryKey) {
-			console.log(categoryKey);
 			document.querySelector('div[data-key="'+categoryKey+'"]').querySelector(".js-sticketPlaceholder>input").focus();
 		}
 	},
