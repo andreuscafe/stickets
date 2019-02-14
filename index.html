@@ -17,8 +17,6 @@
 			id="app"
 			class="appWrapper"
 			:class="{'m--horizontal': store.state.horizontalLayout}"
-			v-on:keydown.ctrl.78.prevent="addCategory"
-			v-on:keydown.meta.78.prevent="addCategory"
 		>
 			<div class="l-loader" v-show="loading">S</div>
 
@@ -38,6 +36,7 @@
 								placeholder="Buscar..."
 								spellcheck="false"
 								v-model="store.state.searchField"
+								v-on:keydown.shift.65.stop
 							/>
 						</div>
 
@@ -103,7 +102,7 @@
 						>
 							<div class="categoryHeader">
 								<h1 class="categoryName">
-									<pre class="categoryNameSizer">{{ category.name }}<textarea class="name" v-model="category.name" spellcheck="false" v-bind:placeholder="category.placeholder" @click.prevent.stop></textarea>
+									<pre class="categoryNameSizer">{{ category.name }}<textarea class="name" v-model="category.name" spellcheck="false" v-bind:placeholder="category.placeholder" @click.prevent.stop v-on:keydown.shift.65.stop></textarea>
 									</pre>
 								</h1>
 								<div class="categoryActions">
@@ -119,6 +118,7 @@
 							</div>
 							<div class="sticketsWrapper"
 								:class="{'m--masonry': store.state.masonryLayout}"
+								@click.prevent.stop
 							>
 								<div
 									class="m-sticket"
@@ -128,6 +128,7 @@
 									v-for="(sticket, index) in sticketsFiltered(category)"
 									:data-key="sticket.key"
 									:class="{'m--masonry': store.state.masonryLayout}"
+									@click.prevent.stop
 								>
 									<div class="sticketActions">
 										<div class="action m--actionDelete" @click="deleteSticket(sticket.key, category.key)">✕</div>
@@ -138,7 +139,8 @@
 											v-model="sticket.title"
 											spellcheck="false"
 											v-on:keydown.ctrl.delete.exact.stop="deleteSticket(sticket.key, category.key)"
-											v-on:keydown.meta.delete.exact.stop="deleteSticket(sticket.key, category.key)">
+											v-on:keydown.meta.delete.exact.stop="deleteSticket(sticket.key, category.key)"
+											v-on:keydown.shift.65.stop>
 											</textarea>
 										</pre>
 									</div>
@@ -148,7 +150,8 @@
 											v-model="sticket.description"
 											spellcheck="false"
 											v-on:keydown.ctrl.delete.exact.stop="deleteSticket(sticket.key, category.key)"
-											v-on:keydown.meta.delete.exact.stop="deleteSticket(sticket.key, category.key)">
+											v-on:keydown.meta.delete.exact.stop="deleteSticket(sticket.key, category.key)"
+											v-on:keydown.shift.65.stop>
 											</textarea>
 										</pre>
 									</div>
@@ -159,6 +162,7 @@
 									class="m-sticket m--placeholder js-sticketPlaceholder"
 									:class="{ 's--hasData': formHasData, 'm--masonry': store.state.masonryLayout}"
 									v-if="!store.state.searchField"
+									@click.prevent.stop
 								>
 									<input
 										class="sticketTitle"
@@ -167,7 +171,7 @@
 										spellcheck="false"
 										v-on:keydown.meta.13="addSticket(category.key)"
 										v-on:keydown.ctrl.13="addSticket(category.key)"
-										@click.prevent.stop
+										v-on:keydown.shift.65.stop
 									/>
 									<div class="textAreaWrapper">{{ form.description }}
 										<textarea
@@ -177,7 +181,8 @@
 										spellcheck="false"
 										v-on:keydown.meta.13="addSticket(category.key)"
 										v-on:keydown.ctrl.13="addSticket(category.key)"
-										@click.prevent.stop></textarea>
+										v-on:keydown.shift.65.stop
+										></textarea>
 									</div>
 									<div
 										class="sticketSubmit"

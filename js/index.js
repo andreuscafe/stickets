@@ -208,6 +208,7 @@ let vm = new Vue({
 				(this.form.title || this.form.description) &&
 				(categoryKey || this.form.categoryKey)
 			) {
+				this.focusPlaceholder(categoryKey)
 				this.store.addSticket(
 					this.form.title,
 					this.form.description,
@@ -225,6 +226,7 @@ let vm = new Vue({
 
 		deleteSticket(sticketKey, categoryKey) {
 			this.store.deleteSticket(sticketKey, categoryKey);
+			this.focusPlaceholder(categoryKey)
 		},
 
 		clearStickets() {
@@ -402,10 +404,13 @@ let vm = new Vue({
 	},
 	mounted: function() {
 		document.addEventListener('keydown', e => {
-			if (e.keyCode == 65 && (e.shiftKey)){
+			console.log(e);
+			if (e.keyCode == 65 && e.shiftKey){
+				// Shortcut shift + A
 				e.preventDefault(); e.stopPropagation();
 				this.addCategory();
 			} else if (e.keyCode == 70 && (e.metaKey || e.ctrlKey)) {
+				// Shortcut cmd/ctrl + F
 				e.preventDefault(); e.stopPropagation();
 				document.querySelector('.js-search').focus();
 			}
