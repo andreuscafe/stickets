@@ -9,6 +9,10 @@
 		padding: 0 0 30px;
 	}
 
+	.advise {
+		padding: 0px 0px 25px;
+	}
+
 	&:last-child {
 		margin: 0px;
 		border-bottom: 0;
@@ -68,6 +72,10 @@
 			position: -webkit-sticky;
 			position: sticky;
 			top: 0;
+		}
+
+		.advise {
+			padding: 0px 15px 25px;
 		}
 
 		.sticketsWrapper {

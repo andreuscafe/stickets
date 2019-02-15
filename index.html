@@ -87,6 +87,7 @@
 						<div
 							class="m-category"
 							v-for="category in store.state.categories"
+							v-show="sticketsFiltered(category).length || (!store.state.searchField && !category.stickets.length)"
 							:class="{
 								'js-masonry m--masonry': store.state.masonryLayout,
 								'm--horizontal': store.state.horizontalLayout
@@ -115,6 +116,9 @@
 									</div>
 									<div class="iconAction action" @click.stop="removeCategory(category.key)">✕</div>
 								</div>
+							</div>
+							<div class="advise" v-if="store.state.searchField">
+								{{ store.state.searchField ? 'Mostrando resultados de "'+store.state.searchField+'"' : '' }}
 							</div>
 							<div class="sticketsWrapper"
 								:class="{'m--masonry': store.state.masonryLayout}"
@@ -161,7 +165,7 @@
 								<div
 									class="m-sticket m--placeholder js-sticketPlaceholder"
 									:class="{ 's--hasData': formHasData, 'm--masonry': store.state.masonryLayout}"
-									v-if="!store.state.searchField"
+									v-show="!store.state.searchField"
 									@click.prevent.stop
 								>
 									<input
@@ -206,6 +210,7 @@
 							class="m-category m--placeholder"
 							@click.stop="addCategory"
 							:class="{'m--horizontal': store.state.horizontalLayout}"
+							v-show="!store.state.searchField"
 							tabindex="0"
 							@keydown.enter="addCategory"
 							@keydown.space="addCategory"
