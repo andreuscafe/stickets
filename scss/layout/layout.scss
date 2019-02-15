@@ -1,6 +1,10 @@
 body {
-	font-family: $primaryFont, $secondaryFont, $thirdFont;
+	font-family: $primaryFont, $secondaryFont, $thirdFont !important;
 	color: #333;
+}
+
+input, textarea {
+	font-family: $primaryFont, $secondaryFont, $thirdFont !important;
 }
 
 .appWrapper {
