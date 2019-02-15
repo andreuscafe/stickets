@@ -404,7 +404,6 @@ let vm = new Vue({
 	},
 	mounted: function() {
 		document.addEventListener('keydown', e => {
-			console.log(e);
 			if (e.keyCode == 65 && e.shiftKey){
 				// Shortcut shift + A
 				e.preventDefault(); e.stopPropagation();
