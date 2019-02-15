@@ -39,13 +39,13 @@ let store = {
 					key: new Date().getTime(),
 					title: title,
 					description: description,
+					featured: false
 				});
 
 				break;
 			}
 		}
 	},
-
 	deleteSticket(sticketKey, categoryKey) {
 		let category = this.getCategory(categoryKey);
 		category.stickets.splice(
@@ -55,7 +55,6 @@ let store = {
 			1
 		);
 	},
-
 	addCategory(placeholder, callback) {
 		if (this.debug) console.log('addCategory triggered with placeholder: ' + name);
 
@@ -70,7 +69,6 @@ let store = {
 
 		if (callback) callback(this.getCategory(newCategory.key));
 	},
-
 	moveSticket(sticketKey, fromKey, toKey) {
 		if (this.debug) {
 			console.log(
@@ -92,6 +90,9 @@ let store = {
 				this.getCategory(toKey).stickets.push(sticket[0]);
 			}
 		}
+	},
+	toggleFeaturedSticket(sticketKey, categoryKey) {
+		this.getSticket(sticketKey, categoryKey).featured = !this.getSticket(sticketKey, categoryKey).featured
 	},
 	clearAllStickets() {
 		if (this.debug) {
@@ -132,8 +133,6 @@ let store = {
 		} else {
 			actuallyRemove()
 		}
-
-
 	},
 	renameCategory(categoryKey, newName) {
 		if (newName) {
@@ -150,6 +149,27 @@ let store = {
 			return sticket.key == sticketKey;
 		})[0];
 	},
+	fixFeaturedStickets() {
+		let hasUndefineds = false;
+		this.state.categories.forEach((c) => {
+			c.stickets.forEach((s) => {
+				if (s.featured == undefined) {
+					hasUndefineds = true;
+					console.log(s.title);
+					s.featured = false
+				};
+			})
+		})
+
+		this.updateLocalstorage();
+
+		if (hasUndefineds) {
+			location.reload()
+		}
+	},
+	updateLocalstorage() {
+		localStorage.setItem('storeState', JSON.stringify(this.state));
+	}
 };
 
 let vm = new Vue({
@@ -227,6 +247,10 @@ let vm = new Vue({
 		deleteSticket(sticketKey, categoryKey) {
 			this.store.deleteSticket(sticketKey, categoryKey);
 			this.focusPlaceholder(categoryKey)
+		},
+
+		toggleFeaturedSticket(sticketKey, categoryKey) {
+			this.store.toggleFeaturedSticket(sticketKey, categoryKey)
 		},
 
 		clearStickets() {
@@ -419,6 +443,8 @@ let vm = new Vue({
 			// Code that will run only after the
 			// entire view has been rendered
 
+			this.store.fixFeaturedStickets();
+
 			if (this.loading && this.store.state.masonryLayout) {
 				this.store.state.categories.forEach(cat => {
 					this.initializeMacy(cat);
@@ -439,7 +465,7 @@ let vm = new Vue({
 			function() {
 				if (_debug) console.log('Store has changed!');
 
-				localStorage.setItem('storeState', JSON.stringify(store.state));
+				this.store.updateLocalstorage();
 			},
 			{ deep: true }
 		);

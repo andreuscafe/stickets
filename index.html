@@ -135,7 +135,13 @@
 									@click.prevent.stop
 								>
 									<div class="sticketActions">
-										<div class="action m--actionDelete" @click="deleteSticket(sticket.key, category.key)">✕</div>
+										<div class="action m--actionDelete"
+											@click="deleteSticket(sticket.key, category.key)"
+										>✕</div>
+										<div class="action m--featuredIcon" 
+											:class="{'m--featured': sticket.featured == undefined ? false : sticket.featured}"
+											@click="toggleFeaturedSticket(sticket.key, category.key)"
+										>!</div>
 									</div>
 									<div class="titleWrapper">
 										<pre class="titleSizer">{{ sticket.title }}<textarea
