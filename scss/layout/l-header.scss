@@ -19,11 +19,24 @@
 		height: 64px;
 
 		.appTitle {
+			display: inline-flex;
+			align-items: center;
 			font-weight: 900;
 			font-size: 1.6rem;
 			color: #fff;
 			text-shadow: 2px 2px 0px $secondaryColor,
 				3px 3px 7px darken($secondaryColor, 15%);
+
+			.beta {
+				background-color: #fff;
+				padding: 5px;
+				border-radius: 5px;
+				color: $secondaryColor;
+				text-shadow: none;
+				font-size: 1rem;
+				font-weight: 300;
+				margin-left: 10px;
+			}
 		}
 
 		.actionsWrapper {

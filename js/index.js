@@ -443,7 +443,7 @@ let vm = new Vue({
 			// Code that will run only after the
 			// entire view has been rendered
 
-			this.store.fixFeaturedStickets();
+			// this.store.fixFeaturedStickets();
 
 			if (this.loading && this.store.state.masonryLayout) {
 				this.store.state.categories.forEach(cat => {
