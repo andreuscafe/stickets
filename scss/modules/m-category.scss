@@ -1,7 +1,18 @@
 .m-category {
-	transition: background-color 0.3s ease-in-out;
+	transition: all 0.5s ease-in-out;
 	padding: 30px 0;
 	border-bottom: 1px solid #eee;
+	max-width: 100%;
+
+	/* .fade-enter defines the starting state for entering */
+	/* .fade-leave defines the ending state for leaving */
+	&.fade-enter, &.fade-leave {
+	  max-width: 0;
+	  overflow: hidden;
+	  // padding: 0 10px;
+	  opacity: 0;
+	  background-color: red;
+	}
 
 	@include mobile {
 		min-width: 100%;

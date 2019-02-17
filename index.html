@@ -86,7 +86,7 @@
 					<div class="categoriesWrapper">
 						<div
 							class="m-category"
-							v-for="category in store.state.categories"
+							v-for="(category, index) in store.state.categories"
 							v-show="sticketsFiltered(category).length || (!store.state.searchField && !category.stickets.length)"
 							:class="{
 								'js-masonry m--masonry': store.state.masonryLayout,
@@ -100,6 +100,7 @@
 							v-on:keydown.ctrl.shift.delete.prevent.stop="removeCategory(category.key)"
 							v-on:keydown.meta.shift.delete.prevent.stop="removeCategory(category.key)"
 							:data-key="category.key"
+							:key="category.key"
 						>
 							<div class="categoryHeader">
 								<h1 class="categoryName">
@@ -117,9 +118,9 @@
 									<div class="iconAction action" @click.stop="removeCategory(category.key)">✕</div>
 								</div>
 							</div>
-							<div class="advise" v-if="store.state.searchField">
+							<!-- <div class="advise" v-if="store.state.searchField">
 								{{ store.state.searchField ? 'Mostrando resultados de "'+store.state.searchField+'"' : '' }}
-							</div>
+							</div> -->
 							<div class="sticketsWrapper"
 								:class="{'m--masonry': store.state.masonryLayout}"
 								@click.prevent.stop
@@ -131,6 +132,7 @@
 									v-on:dragstart.stop="dragSticket"
 									v-for="(sticket, index) in sticketsFiltered(category)"
 									:data-key="sticket.key"
+									:key="sticket.key"
 									:class="{'m--masonry': store.state.masonryLayout}"
 									@click.prevent.stop
 								>
@@ -211,7 +213,6 @@
 								</div>
 							</div>
 						</div>
-
 						<div
 							class="m-category m--placeholder"
 							@click.stop="addCategory"
