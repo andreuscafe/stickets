@@ -1,4 +1,4 @@
-# Stickets - https://andreuscafe.github.io/stickets/
+# Stickets - https://stickets.io
 Stickets (Super-tickets!) app, a very simple n' cool app to help you keep your ideas ordered.
 
 That's at least how I do use it.
