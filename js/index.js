@@ -354,7 +354,6 @@ let vm = new Vue({
 				'Películas a ver...',
 				'Detalles oportunos...',
 				'Recordar...',
-				'/watch?v=dQw4w9WgXcQ'
 			];
 			this.store.addCategory(
 				placeholders[Math.floor(Math.random() * placeholders.length)],

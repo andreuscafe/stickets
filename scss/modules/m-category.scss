@@ -134,6 +134,7 @@
 			font-size: 1.8rem;
 			line-height: 2.4rem;
 			color: $Palette4;
+			min-width: 0;
 
 			@include mobile {
 				padding: 0;
