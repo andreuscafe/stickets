@@ -1,152 +1,200 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<title>Stickets</title>
-		<meta http-equiv="X-UA-Compatible" content="ie=edge" />
-		<meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
-		<meta name="viewport" content="initial-scale=1" />
+    <head>
+        <title>Stickets</title>
+        <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+        <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-		<meta name=”description” content="Tablero de tickets simples, con estilo post-it. Sin registros, sin vueltas, sin publicidad. Sólo vos y tus ideas." />
+        <link rel="icon" href="favicon.ico" type="image/png" />
+        <link rel="stylesheet" href="css/styles.css" />
 
-		<link rel="icon" href="favicon.ico" type="image/png">
-		<link rel="stylesheet" href="css/styles.css" />
-	</head>
+        <!-- Primary Meta Tags -->
+        <title>Stickets.io</title>
+        <meta name="title" content="Stickets.io" />
+        <meta
+            name="description"
+            content="Aplicación simple y rápida de organización de tareas, gratis y sin registro."
+        />
 
-	<body>
-		<div
-			id="app"
-			class="appWrapper"
-			:class="{'m--horizontal': store.state.horizontalLayout}"
-		>
-			<div class="l-loader" v-show="loading">S</div>
+        <!-- Open Graph / Facebook -->
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://stickets.io/" />
+        <meta property="og:title" content="Stickets.io" />
+        <meta
+            property="og:description"
+            content="Aplicación simple y rápida de organización de tareas, gratis y sin registro."
+        />
+        <meta property="og:image" content="./assets/cover.png" />
 
-			<header
-				class="l-header"
-				role="banner"
-				:class="{'m--horizontal': store.state.horizontalLayout}"
-			>
-				<div class="contentWrapper">
-					<div class="headerWrapper">
-						<div class="appTitle">Stickets <span class="beta">βeta</span></div>
+        <!-- Twitter -->
+        <meta property="twitter:card" content="summary_large_image" />
+        <meta property="twitter:url" content="https://stickets.io/" />
+        <meta property="twitter:title" content="Stickets.io" />
+        <meta
+            property="twitter:description"
+            content="Aplicación simple y rápida de organización de tareas, gratis y sin registro."
+        />
+        <meta property="twitter:image" content="./assets/cover.png" />
+    </head>
 
-						<div class="m-search m--onHeader">
-							<input
-								type="text"
-								class="searchInput js-search"
-								placeholder="Buscar..."
-								spellcheck="false"
-								v-model="store.state.searchField"
-								v-on:keydown.shift.65.stop
-							/>
-						</div>
+    <body>
+        <div
+            id="app"
+            class="appWrapper"
+            :class="{'m--horizontal': store.state.horizontalLayout}"
+        >
+            <div class="l-loader" v-show="loading">S</div>
 
-						<div class="actionsWrapper">
-							<div
-								class="action m--actionToggleLayout"
-								@click="toggleOrientation"
-							>
-								💅
-							</div>
-						</div>
-					</div>
-				</div>
-			</header>
+            <header
+                class="l-header"
+                role="banner"
+                :class="{'m--horizontal': store.state.horizontalLayout}"
+            >
+                <div class="contentWrapper">
+                    <div class="headerWrapper">
+                        <div class="appTitle">
+                            Stickets <span class="beta">βeta</span>
+                        </div>
 
-			<section
-				class="l-categories"
-				:class="{'m--horizontal': store.state.horizontalLayout}"
-			>
-				<div
-					class="m-overlap m--noCategories"
-					v-if="!store.state.categories.length"
-				>
-					<div class="contentWrapper">
-						<div class="overlapContent">
-							<div class="emoji">😅</div>
-							<h3 class="overlapTitle">No tenés categorías.</h3>
-							<div class="overlapDescription">
-								Pero es muy fácil cambiar eso.
-								<br />
-								Presioná el botón verde de abajo.
-								<br>
-								<br>
-								O mejor; presioná <b>shift+A.</b>
-							</div>
-							<div class="overlapAction" @click="addCategory">
-								¿shift+A? ¿Quién usaría esa combinación?
-							</div>
-						</div>
-					</div>
-				</div>
+                        <div class="m-search m--onHeader">
+                            <input
+                                type="text"
+                                class="searchInput js-search"
+                                placeholder="Buscar..."
+                                spellcheck="false"
+                                v-model="store.state.searchField"
+                                v-on:keydown.shift.65.stop
+                            />
+                        </div>
 
-				<div
-					class="contentWrapper"
-					:class="{'m--horizontal': store.state.horizontalLayout}"
-				>
-					<div class="categoriesWrapper">
-						<div
-							class="m-category"
-							v-for="(category, index) in store.state.categories"
-							v-show="sticketsFiltered(category).length || (!store.state.searchField && !category.stickets.length)"
-							:class="{
+                        <div class="actionsWrapper">
+                            <div
+                                class="action m--actionToggleLayout"
+                                @click="toggleOrientation"
+                            >
+                                💅
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <section
+                class="l-categories"
+                :class="{'m--horizontal': store.state.horizontalLayout}"
+            >
+                <div
+                    class="m-overlap m--noCategories"
+                    v-if="!store.state.categories.length"
+                >
+                    <div class="contentWrapper">
+                        <div class="overlapContent">
+                            <div class="emoji">😅</div>
+                            <h3 class="overlapTitle">No tenés categorías.</h3>
+                            <div class="overlapDescription">
+                                Pero es muy fácil cambiar eso.
+                                <br />
+                                Presioná el botón verde de abajo.
+                                <br />
+                                <br />
+                                O mejor; presioná <b>shift+A.</b>
+                            </div>
+                            <div class="overlapAction" @click="addCategory">
+                                ¿shift+A? ¿Quién usaría esa combinación?
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div
+                    class="contentWrapper"
+                    :class="{'m--horizontal': store.state.horizontalLayout}"
+                >
+                    <div class="categoriesWrapper">
+                        <div
+                            class="m-category"
+                            v-for="(category, index) in store.state.categories"
+                            v-show="sticketsFiltered(category).length || (!store.state.searchField && !category.stickets.length)"
+                            :class="{
 								'js-masonry m--masonry': store.state.masonryLayout,
 								'm--horizontal': store.state.horizontalLayout
 							}"
-							@click.prevent="focusPlaceholder(category.key)"
-							@drop.prevent="dropSticket"
-							@dragover.prevent="allowDrop"
-							@dragenter.prevent.stop="dragEnter"
-							@dragleave.prevent.stop="dragLeave"
-							v-on:keydown.ctrl.shift.delete.prevent.stop="removeCategory(category.key)"
-							v-on:keydown.meta.shift.delete.prevent.stop="removeCategory(category.key)"
-							:data-key="category.key"
-							:key="category.key"
-						>
-							<div class="categoryHeader">
-								<h1 class="categoryName">
-									<pre class="categoryNameSizer">{{ category.name }}<textarea class="name" v-model="category.name" spellcheck="false" v-bind:placeholder="category.placeholder" @click.prevent.stop v-on:keydown.shift.65.stop></textarea>
+                            @click.prevent="focusPlaceholder(category.key)"
+                            @drop.prevent="dropSticket"
+                            @dragover.prevent="allowDrop"
+                            @dragenter.prevent.stop="dragEnter"
+                            @dragleave.prevent.stop="dragLeave"
+                            v-on:keydown.ctrl.shift.delete.prevent.stop="removeCategory(category.key)"
+                            v-on:keydown.meta.shift.delete.prevent.stop="removeCategory(category.key)"
+                            :data-key="category.key"
+                            :key="category.key"
+                        >
+                            <div class="categoryHeader">
+                                <h1 class="categoryName">
+                                    <pre
+                                        class="categoryNameSizer"
+                                    >{{ category.name }}<textarea class="name" v-model="category.name" spellcheck="false" v-bind:placeholder="category.placeholder" @click.prevent.stop v-on:keydown.shift.65.stop></textarea>
 									</pre>
-								</h1>
-								<div class="categoryActions">
-									<!-- <div class="textAction action" @click="renameCategory(category.key)">Renombrar</div> -->
-									<span class="textAction action">({{category.stickets.length}})</span>
-									<div class="iconAction action"
-										@click.stop="clearCategoryStickets(category.key)"
-										v-if="category.stickets.length > 0">
-										↻
-									</div>
-									<div class="iconAction action" @click.stop="removeCategory(category.key)">✕</div>
-								</div>
-							</div>
-							<!-- <div class="advise" v-if="store.state.searchField">
+                                </h1>
+                                <div class="categoryActions">
+                                    <!-- <div class="textAction action" @click="renameCategory(category.key)">Renombrar</div> -->
+                                    <span class="textAction action"
+                                        >({{category.stickets.length}})</span
+                                    >
+                                    <div
+                                        class="iconAction action"
+                                        @click.stop="clearCategoryStickets(category.key)"
+                                        v-if="category.stickets.length > 0"
+                                    >
+                                        ↻
+                                    </div>
+                                    <div
+                                        class="iconAction action"
+                                        @click.stop="removeCategory(category.key)"
+                                    >
+                                        ✕
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- <div class="advise" v-if="store.state.searchField">
 								{{ store.state.searchField ? 'Mostrando resultados de "'+store.state.searchField+'"' : '' }}
 							</div> -->
-							<div class="sticketsWrapper"
-								:class="{'m--masonry': store.state.masonryLayout}"
-								@click.prevent.stop
-							>
-								<div
-									class="m-sticket"
-									draggable="true"
-									@click.prevent.stop
-									v-on:dragstart.stop="dragSticket"
-									v-for="(sticket, index) in sticketsFiltered(category)"
-									:data-key="sticket.key"
-									:key="sticket.key"
-									:class="{'m--masonry': store.state.masonryLayout}"
-									@click.prevent.stop
-								>
-									<div class="sticketActions">
-										<div class="action m--actionDelete"
-											@click="deleteSticket(sticket.key, category.key)"
-										>✕</div>
-										<div class="action m--featuredIcon" 
-											:class="{'m--featured': sticket.featured == undefined ? false : sticket.featured}"
-											@click="toggleFeaturedSticket(sticket.key, category.key)"
-										>!</div>
-									</div>
-									<div class="titleWrapper">
-										<pre class="titleSizer">{{ sticket.title }}<textarea
+                            <div
+                                class="sticketsWrapper"
+                                :class="{'m--masonry': store.state.masonryLayout}"
+                                @click.prevent.stop
+                            >
+                                <div
+                                    class="m-sticket"
+                                    draggable="true"
+                                    @click.prevent.stop
+                                    v-on:dragstart.stop="dragSticket"
+                                    v-for="(sticket, index) in sticketsFiltered(category)"
+                                    :data-key="sticket.key"
+                                    :key="sticket.key"
+                                    :class="{'m--masonry': store.state.masonryLayout}"
+                                    @click.prevent.stop
+                                >
+                                    <div class="sticketActions">
+                                        <div
+                                            class="action m--actionDelete"
+                                            @click="deleteSticket(sticket.key, category.key)"
+                                        >
+                                            ✕
+                                        </div>
+                                        <div
+                                            class="action m--featuredIcon"
+                                            :class="{'m--featured': sticket.featured == undefined ? false : sticket.featured}"
+                                            @click="toggleFeaturedSticket(sticket.key, category.key)"
+                                        >
+                                            !
+                                        </div>
+                                    </div>
+                                    <div class="titleWrapper">
+                                        <pre
+                                            class="titleSizer"
+                                        >{{ sticket.title }}<textarea
 											class="sticketTitle"
 											v-model="sticket.title"
 											spellcheck="false"
@@ -155,9 +203,11 @@
 											v-on:keydown.shift.65.stop>
 											</textarea>
 										</pre>
-									</div>
-									<div class="descriptionWrapper">
-										<pre class="descriptionSizer">{{ sticket.description }}<textarea
+                                    </div>
+                                    <div class="descriptionWrapper">
+                                        <pre
+                                            class="descriptionSizer"
+                                        >{{ sticket.description }}<textarea
 											class="sticketDescription"
 											v-model="sticket.description"
 											spellcheck="false"
@@ -166,110 +216,115 @@
 											v-on:keydown.shift.65.stop>
 											</textarea>
 										</pre>
-									</div>
-								</div>
+                                    </div>
+                                </div>
 
-								<!-- Placeholder for add new stickets -->
-								<div
-									class="m-sticket m--placeholder js-sticketPlaceholder"
-									:class="{ 's--hasData': formHasData, 'm--masonry': store.state.masonryLayout}"
-									v-show="!store.state.searchField"
-									@click.prevent.stop
-								>
-									<input
-										class="sticketTitle"
-										placeholder="Agregar sticket"
-										v-model="form.title"
-										spellcheck="false"
-										v-on:keydown.meta.13="addSticket(category.key)"
-										v-on:keydown.ctrl.13="addSticket(category.key)"
-										v-on:keydown.shift.65.stop
-									/>
-									<div class="textAreaWrapper">{{ form.description }}
-										<textarea
-										class="sticketDescription"
-										placeholder="Escribí algo útil..."
-										v-model="form.description"
-										spellcheck="false"
-										v-on:keydown.meta.13="addSticket(category.key)"
-										v-on:keydown.ctrl.13="addSticket(category.key)"
-										v-on:keydown.shift.65.stop
-										></textarea>
-									</div>
-									<div
-										class="sticketSubmit"
-										@click="addSticket(category.key)"
-										v-show="formHasData"
-										@click.prevent.stop>＋</div>
-								</div>
+                                <!-- Placeholder for add new stickets -->
+                                <div
+                                    class="m-sticket m--placeholder js-sticketPlaceholder"
+                                    :class="{ 's--hasData': formHasData, 'm--masonry': store.state.masonryLayout}"
+                                    v-show="!store.state.searchField"
+                                    @click.prevent.stop
+                                >
+                                    <input
+                                        class="sticketTitle"
+                                        placeholder="Agregar sticket"
+                                        v-model="form.title"
+                                        spellcheck="false"
+                                        v-on:keydown.meta.13="addSticket(category.key)"
+                                        v-on:keydown.ctrl.13="addSticket(category.key)"
+                                        v-on:keydown.shift.65.stop
+                                    />
+                                    <div class="textAreaWrapper">
+                                        {{ form.description }}
+                                        <textarea
+                                            class="sticketDescription"
+                                            placeholder="Escribí algo útil..."
+                                            v-model="form.description"
+                                            spellcheck="false"
+                                            v-on:keydown.meta.13="addSticket(category.key)"
+                                            v-on:keydown.ctrl.13="addSticket(category.key)"
+                                            v-on:keydown.shift.65.stop
+                                        ></textarea>
+                                    </div>
+                                    <div
+                                        class="sticketSubmit"
+                                        @click="addSticket(category.key)"
+                                        v-show="formHasData"
+                                        @click.prevent.stop
+                                    >
+                                        ＋
+                                    </div>
+                                </div>
 
-								<div
-									class="noResults"
-									v-if="!sticketsFiltered(category).length && store.state.searchField"
-								>
-									No hay stickets que contengan "{{
-										store.state.searchField.toLowerCase()
-									}}"
-								</div>
-							</div>
-						</div>
-						<div
-							class="m-category m--placeholder"
-							@click.stop="addCategory"
-							:class="{'m--horizontal': store.state.horizontalLayout}"
-							v-show="!store.state.searchField"
-							tabindex="0"
-							@keydown.enter="addCategory"
-							@keydown.space="addCategory"
-						>
-							<div class="addText">Agregar una categoría</div>
-						</div>
-					</div>
-				</div>
-			</section>
+                                <div
+                                    class="noResults"
+                                    v-if="!sticketsFiltered(category).length && store.state.searchField"
+                                >
+                                    No hay stickets que contengan "{{
+                                    store.state.searchField.toLowerCase() }}"
+                                </div>
+                            </div>
+                        </div>
+                        <div
+                            class="m-category m--placeholder"
+                            @click.stop="addCategory"
+                            :class="{'m--horizontal': store.state.horizontalLayout}"
+                            v-show="!store.state.searchField"
+                            tabindex="0"
+                            @keydown.enter="addCategory"
+                            @keydown.space="addCategory"
+                        >
+                            <div class="addText">Agregar una categoría</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
 
-			<footer class="l-footer" role="contentinfo">
-				<div class="m-madeWithLove">
-					Hecho con
-					<span class="love">
-						<svg class="heart" viewBox="0 0 32 29.6">
-							<path
-								d="M23.6,0c-3.4,0-6.3,2.7-7.6,5.6C14.7,2.7,11.8,0,8.4,0C3.8,0,0,3.8,0,8.4c0,9.4,9.5,11.9,16,21.2c6.1-9.3,16-12.1,16-21.2C32,3.8,28.2,0,23.6,0z"
-							/>
-						</svg>
-					</span>
-					por
-					<a
-						class="loveName"
-						target="_blank"
-						alt="AndreusCafe"
-						href="https://twitter.com/andreuscafe"
-					>
-						@andreuscafe
-					</a>
-				</div>
-			</footer>
-		</div>
+            <footer class="l-footer" role="contentinfo">
+                <div class="m-madeWithLove">
+                    Hecho con
+                    <span class="love">
+                        <svg class="heart" viewBox="0 0 32 29.6">
+                            <path
+                                d="M23.6,0c-3.4,0-6.3,2.7-7.6,5.6C14.7,2.7,11.8,0,8.4,0C3.8,0,0,3.8,0,8.4c0,9.4,9.5,11.9,16,21.2c6.1-9.3,16-12.1,16-21.2C32,3.8,28.2,0,23.6,0z"
+                            />
+                        </svg>
+                    </span>
+                    por
+                    <a
+                        class="loveName"
+                        target="_blank"
+                        alt="AndreusCafe"
+                        href="https://twitter.com/andreuscafe"
+                    >
+                        @andreuscafe
+                    </a>
+                </div>
+            </footer>
+        </div>
 
-		<script src="js/vue.js"></script>
-		<script src="js/macy.js"></script>
-		<!-- <script src="js/vuex.js"></script> -->
+        <script src="js/vue.js"></script>
+        <script src="js/macy.js"></script>
+        <!-- <script src="js/vuex.js"></script> -->
 
-		<script src="js/index.js"></script>
+        <script src="js/index.js"></script>
 
-		<script>
-			let useSW = false;
+        <script>
+            let useSW = false;
 
-			// if (window.location.href.includes("github")) {
-			// 	useSW = true
-			// }
+            // if (window.location.href.includes("github")) {
+            // 	useSW = true
+            // }
 
-			if ('serviceWorker' in navigator && useSW) {
-				// Route for github
-				navigator.serviceWorker.register(window.location.href + 'sw.js').then(function() {
-					console.log('Service Worker Registered');
-				});
-			}
-		</script>
-	</body>
+            if ("serviceWorker" in navigator && useSW) {
+                // Route for github
+                navigator.serviceWorker
+                    .register(window.location.href + "sw.js")
+                    .then(function () {
+                        console.log("Service Worker Registered");
+                    });
+            }
+        </script>
+    </body>
 </html>
